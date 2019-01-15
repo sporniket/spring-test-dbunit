@@ -7,6 +7,20 @@ The project can be configured to run DBUnit tests using a Spring TestExecutionLi
 
 This project was forked from [springtestdbunit/spring-test-dbunit](https://github.com/springtestdbunit/spring-test-dbunit) in order to continue its maintenance.
 
+## Versioning
+
+The versioning of this project follows the one of the Spring Framework:
+
+* Major version matches the one of the Spring Framework
+* Minor version is used for dependency upgrades
+* Patch version is used for bug fixing
+
+The versions used are:
+
+* Spring Framework 4
+* DBUnit 2.5
+* JUnit 4
+
 # Configuration
 
 To have Spring process DBUnit annotations you must first configure your tests to use the `DbUnitTestExecutionListener` class. To do this you need to use the Spring `@TestExecutionListeners` annotation. Generally, as well as `DbUnitTestExecutionListener`, you will also want to include the standard Spring listeners as well. Here are the annotations for a typical JUnit 4 test:
