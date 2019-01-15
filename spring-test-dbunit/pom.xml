@@ -5,12 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.springtestdbunit</groupId>
+		<groupId>com.github.ppodgorsek</groupId>
 		<artifactId>spring-test-dbunit-parent</artifactId>
 		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.github.springtestdbunit</groupId>
+	<groupId>com.github.ppodgorsek</groupId>
 	<artifactId>spring-test-dbunit</artifactId>
 	<packaging>jar</packaging>
 
@@ -28,6 +28,12 @@
 
 	<developers>
 		<developer>
+			<name>Paul Podgorsek</name>
+			<email>ppodgorsek@users.noreply.github.com</email>
+			<organization>GitHub</organization>
+			<organizationUrl>https://github.com/ppodgorsek</organizationUrl>
+		</developer>
+		<developer>
 			<name>Phillip Webb</name>
 			<url>https://github.com/philwebb</url>
 		</developer>
@@ -38,14 +44,14 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/springtestdbunit/spring-test-dbunit</url>
-		<connection>scm:git:git://github.com/springtestdbunit/spring-test-dbunit.git</connection>
-		<developerConnection>scm:git:git@github.com:springtestdbunit/spring-test-dbunit.git</developerConnection>
+		<url>https://github.com/ppodgorsek/spring-test-dbunit</url>
+		<connection>scm:git:git://github.com/ppodgorsek/spring-test-dbunit.git</connection>
+		<developerConnection>scm:git:git@github.com:ppodgorsek/spring-test-dbunit.git</developerConnection>
 	</scm>
 
 	<issueManagement>
-		<url>https://github.com/springtestdbunit/spring-test-dbunit/issues</url>
 		<system>GitHub Issues</system>
+		<url>https://github.com/ppodgorsek/spring-test-dbunit/issues</url>
 	</issueManagement>
 
 	<build>
