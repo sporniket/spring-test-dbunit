@@ -12,6 +12,8 @@
 
 	<groupId>com.github.ppodgorsek</groupId>
 	<artifactId>spring-test-dbunit-sample</artifactId>
+	<packaging>jar</packaging>
+
 	<name>Spring Test DBUnit Sample</name>
 
 	<licenses>
