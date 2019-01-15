@@ -75,7 +75,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.github.ppodgorsek</groupId>
-			<artifactId>spring-test-dbunit</artifactId>
+			<artifactId>spring-test-dbunit-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 
