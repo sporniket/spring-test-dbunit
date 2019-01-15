@@ -15,7 +15,7 @@ The versioning of this project follows the one of the Spring Framework:
 * Minor version is used for dependency upgrades
 * Patch version is used for bug fixing
 
-The versions used are:
+The dependencies used are:
 
 * Spring Framework 4
 * DBUnit 2.5
