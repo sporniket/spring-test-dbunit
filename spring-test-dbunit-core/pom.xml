@@ -11,11 +11,11 @@
 	</parent>
 
 	<groupId>com.github.ppodgorsek</groupId>
-	<artifactId>spring-test-dbunit</artifactId>
+	<artifactId>spring-test-dbunit-core</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Spring Test DBUnit</name>
-	<description>Integration between the Spring testing framework and DBUnit</description>
+	<name>Spring Test DBUnit Core</name>
+	<description>Core module for the integration between the Spring testing framework and DBUnit</description>
 	<url>https://springtestdbunit.github.com/spring-test-dbunit</url>
 
 	<licenses>

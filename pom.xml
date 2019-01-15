@@ -56,7 +56,7 @@
 	</issueManagement>
 
 	<modules>
-		<module>spring-test-dbunit</module>
+		<module>spring-test-dbunit-core</module>
 		<module>spring-test-dbunit-sample</module>
 	</modules>
 
@@ -100,7 +100,7 @@
 		<dependencies>
 			<dependency>
 				<groupId>com.github.ppodgorsek</groupId>
-				<artifactId>spring-test-dbunit</artifactId>
+				<artifactId>spring-test-dbunit-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
