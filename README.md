@@ -1,4 +1,6 @@
-# Introduction
+# DBUnit integration for the Spring testing framework
+
+## What is it?
 
 Spring DBUnit provides integration between the Spring testing framework and the popular DBUnit project. It allows
 to set up and tear down database tables using simple annotations as well as checking expected table contents once a test completes.
@@ -7,7 +9,7 @@ The project can be configured to run DBUnit tests using a Spring TestExecutionLi
 
 This project was forked from [springtestdbunit/spring-test-dbunit](https://github.com/springtestdbunit/spring-test-dbunit) in order to continue its maintenance.
 
-## Versioning
+### Versioning
 
 The versioning of this project follows the one of the Spring Framework:
 
@@ -21,7 +23,7 @@ The dependencies used are:
 * DBUnit 2.5
 * JUnit 4
 
-# Configuration
+## Configuration
 
 To have Spring process DBUnit annotations you must first configure your tests to use the `DbUnitTestExecutionListener` class. To do this you need to use the Spring `@TestExecutionListeners` annotation. Generally, as well as `DbUnitTestExecutionListener`, you will also want to include the standard Spring listeners as well. Here are the annotations for a typical JUnit 4 test:
 
@@ -45,14 +47,14 @@ In order to access the database, Spring DBUnit requires a bean to be registered 
 
 Once you have configured the `DbUnitTestExecutionListener` and provided the bean to access you database you can use the DBUnit annotations.
 
-# Setup and TearDown
+## Setup and TearDown
 
 Note: You need to complete the steps from the configuration section above before any annotations can be used. Without
 appropriate configuration DBUnit annotations will be silently ignored.
 
 The `@DatabaseSetup` and `@DatabaseTearDown` annotations can be used to configure database table before tests execute and reset them once tests have completed.
 
-## Setup
+### Setup
 
 The `@DatabaseSetup` annotation indicates how database tables should be setup before test methods are run. The
 annotation can be applied to individual test methods or to a whole class. When applied at the class level the setup
@@ -72,7 +74,7 @@ By default setup will perform a `CLEAN_INSERT` operation, this means that all da
 DataSet  XML will be removed before inserting new rows. The standard DBUnit operations are supported using type
 attribute. See the JavaDocs for full details.
 
-## TearDown
+### TearDown
 
 The `@DatabaseTearDown` annotation can be used to reset database tables once a test has completed. As with
 `@DatabaseSetup` the annotation can be applied at the method or class level. When using `@DatabaseTearDown` use the value and type attributes in the same way as `@DatabaseSetup`.
@@ -80,7 +82,7 @@ The `@DatabaseTearDown` annotation can be used to reset database tables once a t
 Note: If you are running a teardown in conjunction with a `@Transactional` test you may need to use an alternative
 configuration. See the section on below.
 
-# Expected results
+## Expected results
 
 The `@ExpectedDatabase` annotation can be used to verify the contents of database once a test has completed. You would typically use this annotation when a test performs an insert, update or delete. You can apply the annotation on a single test method or a class. When applied at the class level verification occurs after each test method.
 
@@ -94,7 +96,7 @@ standard DbUnit test, performing a complete compare of the expected and actual d
 
 Note: If you are using this annotation in conjunction with a `@Transactional` test you may need to use an alternative configuration. See the section on below.
 
-# Transactions
+## Transactions
 
 If you have configured DBUnit tests to run using the are `DbUnitTestExecutionListener` and are also using the
 `TransactionalTestExecutionListener` you may experience problems with transactions not being started before your data is setup, or being rolled back before expected results can be verified. In order to support `@Transactional` tests with DBUnit you should use the `TransactionDbUnitTestExecutionListener` class.
@@ -110,7 +112,7 @@ Here are the annotations for a typical JUnit 4 test:
 
 Transactions start before `@DatabaseSetup` and end after `@DatabaseTearDown` and `@ExpectedDatabase`.
 
-# Advanced configuration of the DbUnitTestExecutionListener
+## Advanced configuration of the DbUnitTestExecutionListener
 
 The `@DbUnitConfiguration` annotation can be used if you need to configure advanced options for DBUnit.
 
@@ -124,7 +126,7 @@ reading datasets (see below). If no specific loader is specified a `dbUnitDataSe
 
 The `databaseOperationLookup` attribute allows you to specify a custom lookup strategy for DBUnit database operations (see below).
 
-# Working with multiple connections
+## Working with multiple connections
 
 It is possible to configure Spring Test DBUnit to work with multiple connections within the same test. First declare
 multiple `DataSource` or `IDatabaseConnection` beans in your application context. For example, here is XML configuration for two in-memory databases:
@@ -171,7 +173,7 @@ If you are using an earlier version of Java you will need to use one of the wrap
         // ...
     }
 
-# Custom IDatabaseConnections
+## Custom IDatabaseConnections
 
 In some situations you may need to create an `IDatabaseConnection` with a specific DBUnit configuration. Unfortunately, the standard DBUnit DatabaseConfig class cannot be easily using with Spring. In order to overcome this limitation, the `DatabaseConfigBean` provides an alternative method to configure a connection; with  standard getter/setter access provided for all configuration options. The `DatabaseDataSourceConnectionFactoryBean` accepts a configuration property and should be used to construct the final connection. Here is a typical example:
 
@@ -185,7 +187,7 @@ In some situations you may need to create an `IDatabaseConnection` with a specif
 NOTE: In most circumstances the username and password properties should not be set on the
 `DatabaseDataSourceConnectionFactoryBean`. These properties will cause DBUnit to start a new transaction and may cause unexpected behaviour.
 
-# Writing a DataSet Loader
+## Writing a DataSet Loader
 
 By default DBUnit datasets are loaded from flat XML files. If you need to load data from another source you will need
 to write your own DataSet loader and configure your tests to use it. Custom loaders must implement the `DataSetLoader` interface and provide an implementation of the `loadDataSet` method. The `AbstractDataSetLoader` is also available and provides a convenient base class for most loaders.
@@ -200,9 +202,13 @@ Here is an example loader that reads data from a CSV formatted file.
 
 See above for details of how to configure a test class to use the loader.
 
-# Custom DBUnit Database Operations
+## Custom DBUnit Database Operations
 
 In some situations you may need to use custom DBUnit DatabaseOperation classes. For example, DBUnit includes
 `org.dbunit.ext.mssql.InsertIdentityOperation` for use with Microsoft SQL Server. The `DatabaseOperationLookup` interface can be used to create your own lookup strategy if you need support custom operations. A `MicrosoftSqlDatabaseOperationLookup` class is provided to support the aforementioned MSSQL operations.
 
 See above for details of how to configure a test class to use the custom lookup.
+
+## Please contribute!
+
+Have you found an issue? Do you have an idea for an improvement? Feel free to contribute by submitting it [on the GitHub project](https://github.com/ppodgorsek/spring-test-dbunit/issues).
