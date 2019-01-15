@@ -53,10 +53,6 @@
 		<module>spring-test-dbunit-sample</module>
 	</modules>
 
-	<prerequisites>
-		<maven>3.2.3</maven>
-	</prerequisites>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
@@ -212,10 +208,6 @@
 					<version>${maven-clean-plugin.version}</version>
 				</plugin>
 				<plugin>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${maven-javadoc-plugin.version}</version>
-				</plugin>
-				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>${maven-compiler-plugin.version}</version>
 					<configuration>
@@ -234,6 +226,9 @@
 					<artifactId>maven-eclipse-plugin</artifactId>
 					<version>${maven-eclipse-plugin.version}</version>
 					<configuration>
+						<downloadJavadocs>true</downloadJavadocs>
+						<downloadSources>true</downloadSources>
+
 						<additionalConfig>
 							<file>
 								<name>.settings/org.eclipse.jdt.ui.prefs</name>
@@ -290,44 +285,6 @@
 							<version>1.7</version>
 						</dependency>
 					</dependencies>
-					<configuration>
-						<reportPlugins>
-							<plugin>
-								<artifactId>maven-javadoc-plugin</artifactId>
-								<version>2.10.3</version>
-							</plugin>
-							<plugin>
-								<artifactId>maven-jxr-plugin</artifactId>
-								<version>2.5</version>
-							</plugin>
-							<plugin>
-								<artifactId>maven-pmd-plugin</artifactId>
-								<version>3.6</version>
-								<configuration>
-									<targetJdk>${java.version}</targetJdk>
-								</configuration>
-							</plugin>
-							<plugin>
-								<artifactId>maven-project-info-reports-plugin</artifactId>
-								<version>2.9</version>
-							</plugin>
-							<plugin>
-								<artifactId>maven-surefire-report-plugin</artifactId>
-								<version>2.19.1</version>
-							</plugin>
-							<plugin>
-								<groupId>org.codehaus.mojo</groupId>
-								<artifactId>cobertura-maven-plugin</artifactId>
-								<version>2.7</version>
-								<configuration>
-									<formats>
-										<format>xml</format>
-										<format>html</format>
-									</formats>
-								</configuration>
-							</plugin>
-						</reportPlugins>
-					</configuration>
 				</plugin>
 				<plugin>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -346,8 +303,13 @@
 					</executions>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.10.3</version>
+					<version>${maven-javadoc-plugin.version}</version>
+					<configuration>
+						<author>true</author>
+						<encoding>UTF-8</encoding>
+					</configuration>
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
@@ -376,5 +338,45 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${maven-javadoc-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-pmd-plugin</artifactId>
+				<version>3.6</version>
+				<configuration>
+					<targetJdk>${java.version}</targetJdk>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.9</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<version>2.19.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<formats>
+						<format>xml</format>
+						<format>html</format>
+					</formats>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 
 </project>
