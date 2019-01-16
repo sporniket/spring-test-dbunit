@@ -23,6 +23,27 @@ The dependencies used are:
 * DBUnit 2.5
 * JUnit 4
 
+## How to use this project
+
+All artefacts of this project are available on Maven's central repository, which makes it easy to use in your projects.
+
+If you are using Maven, simply declare the following dependencies:
+* spring-test-dbunit-core:
+`    <dependency>`
+`        <groupId>com.github.ppodgorsek</groupId>`
+`        <artifactId>spring-test-dbunit-core</artifactId>`
+`        <version>${spring-test-dbunit.version}</version>`
+`    </dependency>`
+
+* spring-test-dbunit-sample:
+`    <dependency>`
+`        <groupId>com.github.ppodgorsek</groupId>`
+`        <artifactId>spring-test-dbunit-sample</artifactId>`
+`        <version>${spring-test-dbunit.version}</version>`
+`    </dependency>`
+
+`spring-test-dbunit-core` is the only mandatory one, the others are optional.
+
 ## Configuration
 
 To have Spring process DBUnit annotations you must first configure your tests to use the `DbUnitTestExecutionListener` class. To do this you need to use the Spring `@TestExecutionListeners` annotation. Generally, as well as `DbUnitTestExecutionListener`, you will also want to include the standard Spring listeners as well. Here are the annotations for a typical JUnit 4 test:
