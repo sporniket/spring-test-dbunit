@@ -28,18 +28,18 @@ The dependencies used are:
 All artefacts of this project are available on Maven's central repository, which makes it easy to use in your projects.
 
 If you are using Maven, simply declare the following dependencies:
-* spring-test-dbunit-core:
-`    <dependency>`
-`        <groupId>com.github.ppodgorsek</groupId>`
-`        <artifactId>spring-test-dbunit-core</artifactId>`
-`        <version>${spring-test-dbunit.version}</version>`
+* spring-test-dbunit-core:  
+`    <dependency>`  
+`        <groupId>com.github.ppodgorsek</groupId>`  
+`        <artifactId>spring-test-dbunit-core</artifactId>`  
+`        <version>${spring-test-dbunit.version}</version>`  
 `    </dependency>`
 
-* spring-test-dbunit-sample:
-`    <dependency>`
-`        <groupId>com.github.ppodgorsek</groupId>`
-`        <artifactId>spring-test-dbunit-sample</artifactId>`
-`        <version>${spring-test-dbunit.version}</version>`
+* spring-test-dbunit-sample:  
+`    <dependency>`  
+`        <groupId>com.github.ppodgorsek</groupId>`  
+`        <artifactId>spring-test-dbunit-sample</artifactId>`  
+`        <version>${spring-test-dbunit.version}</version>`  
 `    </dependency>`
 
 `spring-test-dbunit-core` is the only mandatory one, the others are optional.
