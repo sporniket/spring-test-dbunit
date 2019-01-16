@@ -1,3 +1,4 @@
+*.versionsBackup
 .project
 .classpath
 .settings
