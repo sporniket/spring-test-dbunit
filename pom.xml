@@ -85,7 +85,7 @@
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<slf4j.version>1.7.25</slf4j.version>
-		<spring.version>4.2.5.RELEASE</spring.version>
+		<spring.version>4.3.22.RELEASE</spring.version>
 
 		<!-- Maven plugins -->
 		<ant-contrib.version>1.0b3</ant-contrib.version>
