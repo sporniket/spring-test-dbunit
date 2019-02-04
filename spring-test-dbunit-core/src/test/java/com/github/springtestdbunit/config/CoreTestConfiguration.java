@@ -22,6 +22,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.dbunit.dataset.datatype.IDataTypeFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,7 @@ import com.github.springtestdbunit.bean.DatabaseConfigBean;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
 import com.github.springtestdbunit.entity.EntityAssert;
 import com.github.springtestdbunit.entity.OtherEntityAssert;
+import com.github.springtestdbunit.test.config.TestConfiguration;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -43,14 +45,60 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author Paul Podgorsek
  */
 @Configuration
-@Import(GenericTestConfiguration.class)
+@Import(TestConfiguration.class)
 public class CoreTestConfiguration {
 
 	@Value("${database.hibernate.hbm2ddl.import_files}")
 	private String databaseImportFiles;
 
 	@Resource
-	private DatabaseConfigBean databaseConfig;
+	private IDataTypeFactory dataTypeFactory;
+
+	@Resource
+	private DataSource dataSource;
+
+	@Bean
+	public DatabaseConfigBean databaseConfig() {
+
+		DatabaseConfigBean databaseConfig = new DatabaseConfigBean();
+		databaseConfig.setDatatypeFactory(this.dataTypeFactory);
+
+		return databaseConfig;
+	}
+
+	@Bean
+	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory() {
+
+		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
+				this.dataSource);
+		databaseDataSourceConnectionFactory.setDatabaseConfig(databaseConfig());
+
+		return databaseDataSourceConnectionFactory;
+	}
+
+	@Bean
+	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory2() {
+
+		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
+				dataSource2());
+		databaseDataSourceConnectionFactory.setDatabaseConfig(databaseConfig());
+
+		return databaseDataSourceConnectionFactory;
+	}
+
+	@Bean(destroyMethod = "close")
+	public DataSource dataSource2() {
+		return new HikariDataSource(hikariConfig2());
+	}
+
+	@Bean
+	public List<String> hibernatePackagesToScan() {
+
+		List<String> hibernatePackagesToScan = new ArrayList<String>();
+		hibernatePackagesToScan.add("com.github.springtestdbunit.entity");
+
+		return hibernatePackagesToScan;
+	}
 
 	@Bean
 	public HikariConfig hikariConfig2() {
@@ -66,21 +114,6 @@ public class CoreTestConfiguration {
 		return hikariConfig;
 	}
 
-	@Bean(destroyMethod = "close")
-	public DataSource dataSource2() {
-		return new HikariDataSource(hikariConfig2());
-	}
-
-	@Bean
-	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory2() {
-
-		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
-				dataSource2());
-		databaseDataSourceConnectionFactory.setDatabaseConfig(this.databaseConfig);
-
-		return databaseDataSourceConnectionFactory;
-	}
-
 	@Bean
 	public DefaultResourceLoader resourceLoader2() throws ScriptException {
 
@@ -91,15 +124,6 @@ public class CoreTestConfiguration {
 		databasePopulator.execute(dataSource2());
 
 		return resourceLoader;
-	}
-
-	@Bean
-	public List<String> hibernatePackagesToScan() {
-
-		List<String> hibernatePackagesToScan = new ArrayList<String>();
-		hibernatePackagesToScan.add("com.github.springtestdbunit.entity");
-
-		return hibernatePackagesToScan;
 	}
 
 	@Bean

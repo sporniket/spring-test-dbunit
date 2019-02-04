@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
-import com.github.springtestdbunit.config.GenericTestConfiguration;
+import com.github.springtestdbunit.test.config.TestConfiguration;
 
 /**
  * Hibernate configuration for the Sample module.
@@ -30,7 +30,7 @@ import com.github.springtestdbunit.config.GenericTestConfiguration;
  * @author Paul Podgorsek
  */
 @Configuration
-@Import({ GenericTestConfiguration.class, SampleConfiguration.class })
+@Import({ TestConfiguration.class, SampleConfiguration.class })
 public class SampleTestConfiguration {
 
 	@Bean

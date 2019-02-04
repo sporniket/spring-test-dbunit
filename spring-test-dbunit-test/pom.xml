@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -12,10 +12,12 @@
 	</parent>
 
 	<groupId>com.github.ppodgorsek</groupId>
-	<artifactId>spring-test-dbunit-sample</artifactId>
+	<artifactId>spring-test-dbunit-test</artifactId>
 	<packaging>jar</packaging>
 
-	<name>Spring Test DBUnit Sample</name>
+	<name>Spring Test DBUnit Test</name>
+	<description>Test module for the integration between the Spring testing framework and DBUnit</description>
+	<url>https://github.com/ppodgorsek/spring-test-dbunit</url>
 
 	<licenses>
 		<license>
@@ -30,14 +32,6 @@
 			<name>Paul Podgorsek</name>
 			<email>ppodgorsek@users.noreply.github.com</email>
 			<url>https://github.com/ppodgorsek</url>
-		</developer>
-		<developer>
-			<name>Phillip Webb</name>
-			<url>https://github.com/philwebb</url>
-		</developer>
-		<developer>
-			<name>Mario Zagar</name>
-			<url>https://github.com/mzagar</url>
 		</developer>
 	</developers>
 
@@ -56,47 +50,7 @@
 		<config.path.prefix>..</config.path.prefix>
 	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<additionalConfig>
-						<file>
-							<name>.settings/org.eclipse.jdt.ui.prefs</name>
-							<location>../eclipse/org.eclipse.jdt.ui.prefs</location>
-						</file>
-						<file>
-							<name>.settings/org.eclipse.jdt.core.prefs</name>
-							<location>../eclipse/org.eclipse.jdt.core.prefs</location>
-						</file>
-					</additionalConfig>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
 	<dependencies>
-		<dependency>
-			<groupId>com.github.ppodgorsek</groupId>
-			<artifactId>spring-test-dbunit-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.github.ppodgorsek</groupId>
-			<artifactId>spring-test-dbunit-core</artifactId>
-			<type>test-jar</type>
-		</dependency>
-		<dependency>
-			<groupId>com.github.ppodgorsek</groupId>
-			<artifactId>spring-test-dbunit-test</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-		</dependency>
-
-		<!-- Expected Dependencies -->
 		<dependency>
 			<groupId>org.dbunit</groupId>
 			<artifactId>dbunit</artifactId>
@@ -107,15 +61,42 @@
 			<artifactId>spring-context</artifactId>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>provided</scope>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<scope>provided</scope>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
 		</dependency>
 	</dependencies>
 
