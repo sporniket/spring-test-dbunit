@@ -81,6 +81,7 @@
 		<dbunit.version>2.6.0</dbunit.version>
 		<doxia-module-markdown.version>1.8</doxia-module-markdown.version>
 		<hibernate.version>5.4.0.Final</hibernate.version>
+		<hikaricp.version>3.3.0</hikaricp.version>
 		<hsqldb.version>2.4.1</hsqldb.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.9.5</mockito.version>
@@ -122,11 +123,30 @@
 			</dependency>
 			<dependency>
 				<groupId>com.github.ppodgorsek</groupId>
+				<artifactId>spring-test-dbunit-core</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.github.ppodgorsek</groupId>
 				<artifactId>spring-test-dbunit-sample</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.github.ppodgorsek</groupId>
+				<artifactId>spring-test-dbunit-sample</artifactId>
+				<version>${project.version}</version>
+				<type>test-jar</type>
+				<scope>test</scope>
+			</dependency>
 
 			<!-- Expected Dependencies -->
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${hikaricp.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
