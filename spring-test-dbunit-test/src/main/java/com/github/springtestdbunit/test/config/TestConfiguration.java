@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.springtestdbunit.config;
+package com.github.springtestdbunit.test.config;
 
 import java.util.List;
 import java.util.Properties;
@@ -32,8 +32,6 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import com.github.springtestdbunit.bean.DatabaseConfigBean;
-import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -44,52 +42,19 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 @Configuration
 @EnableTransactionManagement
-public class GenericTestConfiguration {
+public class TestConfiguration {
 
 	@Resource
 	private List<String> hibernatePackagesToScan;
 
-	@Bean
-	public IDataTypeFactory dataTypeFactory() {
-		return new HsqldbDataTypeFactory();
-	}
-
-	@Bean
-	public DatabaseConfigBean databaseConfig() {
-
-		DatabaseConfigBean databaseConfig = new DatabaseConfigBean();
-		databaseConfig.setDatatypeFactory(dataTypeFactory());
-
-		return databaseConfig;
-	}
-
-	@Bean
-	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory() {
-
-		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
-				dataSource());
-		databaseDataSourceConnectionFactory.setDatabaseConfig(databaseConfig());
-
-		return databaseDataSourceConnectionFactory;
-	}
-
-	@Bean
-	public HikariConfig hikariConfig() {
-
-		HikariConfig hikariConfig = new HikariConfig();
-		hikariConfig.setPoolName("springHikariCP");
-		hikariConfig.setDriverClassName("org.hsqldb.jdbcDriver");
-		hikariConfig.setJdbcUrl("jdbc:hsqldb:mem:springtestdbunit");
-		hikariConfig.setUsername("sa");
-		hikariConfig.setPassword("");
-		hikariConfig.setMaximumPoolSize(50);
-
-		return hikariConfig;
-	}
-
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
 		return new HikariDataSource(hikariConfig());
+	}
+
+	@Bean
+	public IDataTypeFactory dataTypeFactory() {
+		return new HsqldbDataTypeFactory();
 	}
 
 	@Bean
@@ -117,6 +82,20 @@ public class GenericTestConfiguration {
 		factory.afterPropertiesSet();
 
 		return factory.getObject();
+	}
+
+	@Bean
+	public HikariConfig hikariConfig() {
+
+		HikariConfig hikariConfig = new HikariConfig();
+		hikariConfig.setPoolName("springHikariCP");
+		hikariConfig.setDriverClassName("org.hsqldb.jdbcDriver");
+		hikariConfig.setJdbcUrl("jdbc:hsqldb:mem:springtestdbunit");
+		hikariConfig.setUsername("sa");
+		hikariConfig.setPassword("");
+		hikariConfig.setMaximumPoolSize(50);
+
+		return hikariConfig;
 	}
 
 	@Bean
