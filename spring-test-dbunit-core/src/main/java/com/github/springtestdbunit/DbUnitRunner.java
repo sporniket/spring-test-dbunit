@@ -17,7 +17,7 @@
 package com.github.springtestdbunit;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -129,7 +129,8 @@ public class DbUnitRunner {
 
 	private void verifyExpected(DbUnitTestContext testContext, DatabaseConnections connections,
 			DataSetModifier modifier, ExpectedDatabase annotation)
-					throws Exception, DataSetException, SQLException, DatabaseUnitException {
+			throws Exception, DataSetException, SQLException, DatabaseUnitException {
+
 		String query = annotation.query();
 		String table = annotation.table();
 		IDataSet expectedDataSet = loadDataset(testContext, annotation.value(), modifier);
@@ -244,21 +245,21 @@ public class DbUnitRunner {
 			Assert.state((annotation instanceof DatabaseSetup) || (annotation instanceof DatabaseTearDown),
 					"Only DatabaseSetup and DatabaseTearDown annotations are supported");
 			Map<String, Object> attributes = AnnotationUtils.getAnnotationAttributes(annotation);
-			this.type = (DatabaseOperation) attributes.get("type");
-			this.value = (String[]) attributes.get("value");
-			this.connection = (String) attributes.get("connection");
+			type = (DatabaseOperation) attributes.get("type");
+			value = (String[]) attributes.get("value");
+			connection = (String) attributes.get("connection");
 		}
 
 		public DatabaseOperation getType() {
-			return this.type;
+			return type;
 		}
 
 		public String[] getValue() {
-			return this.value;
+			return value;
 		}
 
 		public String getConnection() {
-			return this.connection;
+			return connection;
 		}
 
 		public static <T extends Annotation> Collection<AnnotationAttributes> get(Annotations<T> annotations) {
@@ -280,15 +281,39 @@ public class DbUnitRunner {
 		private final List<T> allAnnotations;
 
 		public Annotations(DbUnitTestContext context, Class<? extends Annotation> container, Class<T> annotation) {
-			this.classAnnotations = getAnnotations(context.getTestClass(), container, annotation);
-			this.methodAnnotations = getAnnotations(context.getTestMethod(), container, annotation);
+			this.classAnnotations = getClassAnnotations(context.getTestClass(), container, annotation);
+			this.methodAnnotations = getMethodAnnotations(context.getTestMethod(), container, annotation);
 			List<T> allAnnotations = new ArrayList<T>(this.classAnnotations.size() + this.methodAnnotations.size());
 			allAnnotations.addAll(this.classAnnotations);
 			allAnnotations.addAll(this.methodAnnotations);
 			this.allAnnotations = Collections.unmodifiableList(allAnnotations);
 		}
 
-		private List<T> getAnnotations(AnnotatedElement element, Class<? extends Annotation> container,
+		/**
+		 * Finds the annotations which have been declared at class level, on the class itself or any of its parents.
+		 *
+		 * @param element The class.
+		 * @param container The type of container annotation to look for.
+		 * @param annotation The type of annotation to look for.
+		 * @return The list of annotations found on the class and its parents, can be empty but never {@code null}.
+		 */
+		private List<T> getClassAnnotations(Class<?> element, Class<? extends Annotation> container,
+				Class<T> annotation) {
+			List<T> annotations = new ArrayList<T>();
+			addAnnotationToList(annotations, AnnotationUtils.findAnnotation(element, annotation));
+			addRepeatableAnnotationsToList(annotations, AnnotationUtils.findAnnotation(element, container));
+			return Collections.unmodifiableList(annotations);
+		}
+
+		/**
+		 * Finds the annotations which have been declared at method level.
+		 *
+		 * @param element The method.
+		 * @param container The type of container annotation to look for.
+		 * @param annotation The type of annotation to look for.
+		 * @return The list of annotations found on the method, can be empty but never {@code null}.
+		 */
+		private List<T> getMethodAnnotations(Method element, Class<? extends Annotation> container,
 				Class<T> annotation) {
 			List<T> annotations = new ArrayList<T>();
 			addAnnotationToList(annotations, AnnotationUtils.findAnnotation(element, annotation));
