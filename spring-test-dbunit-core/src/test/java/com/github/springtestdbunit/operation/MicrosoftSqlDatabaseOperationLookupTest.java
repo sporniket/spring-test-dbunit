@@ -16,10 +16,10 @@
 
 package com.github.springtestdbunit.operation;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.dbunit.ext.mssql.InsertIdentityOperation;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.github.springtestdbunit.annotation.DatabaseOperation;
 

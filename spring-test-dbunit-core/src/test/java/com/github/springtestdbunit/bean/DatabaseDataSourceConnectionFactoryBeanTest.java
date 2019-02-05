@@ -16,9 +16,14 @@
 
 package com.github.springtestdbunit.bean;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import java.sql.Connection;
 
@@ -26,8 +31,8 @@ import javax.sql.DataSource;
 
 import org.dbunit.database.DatabaseDataSourceConnection;
 import org.dbunit.database.IDatabaseConnection;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 /**
@@ -39,15 +44,15 @@ public class DatabaseDataSourceConnectionFactoryBeanTest {
 
 	private DatabaseDataSourceConnectionFactoryBean factoryBean;
 
-	@Before
+	@BeforeEach
 	public void setup() {
-		this.factoryBean = new DatabaseDataSourceConnectionFactoryBean();
+		factoryBean = new DatabaseDataSourceConnectionFactoryBean();
 	}
 
 	@Test
 	public void shouldNotAllowObjectWithoutDataSet() throws Exception {
 		try {
-			this.factoryBean.getObject();
+			factoryBean.getObject();
 			fail();
 		} catch (IllegalArgumentException ex) {
 			assertEquals("The dataSource is required", ex.getMessage());
@@ -59,8 +64,8 @@ public class DatabaseDataSourceConnectionFactoryBeanTest {
 		DataSource dataSource = mock(DataSource.class);
 		Connection connection = mock(Connection.class);
 		given(dataSource.getConnection()).willReturn(connection);
-		this.factoryBean.setDataSource(dataSource);
-		DatabaseDataSourceConnection bean = this.factoryBean.getObject();
+		factoryBean.setDataSource(dataSource);
+		DatabaseDataSourceConnection bean = factoryBean.getObject();
 		assertNotNull(bean);
 		bean.getConnection().createStatement();
 		verify(dataSource).getConnection();
@@ -69,10 +74,10 @@ public class DatabaseDataSourceConnectionFactoryBeanTest {
 	@Test
 	public void shouldAcceptUsernameAndPassword() throws Exception {
 		DataSource dataSource = mock(DataSource.class);
-		this.factoryBean.setDataSource(dataSource);
-		this.factoryBean.setUsername("username");
-		this.factoryBean.setPassword("password");
-		DatabaseDataSourceConnection bean = this.factoryBean.getObject();
+		factoryBean.setDataSource(dataSource);
+		factoryBean.setUsername("username");
+		factoryBean.setPassword("password");
+		DatabaseDataSourceConnection bean = factoryBean.getObject();
 		assertNotNull(bean);
 		bean.getConnection();
 		verify(dataSource).getConnection("username", "password");
@@ -81,51 +86,53 @@ public class DatabaseDataSourceConnectionFactoryBeanTest {
 	@Test
 	public void shouldSupportSchema() throws Exception {
 		DataSource dataSource = mock(DataSource.class);
-		this.factoryBean.setDataSource(dataSource);
-		this.factoryBean.setSchema("schema");
-		DatabaseDataSourceConnection bean = this.factoryBean.getObject();
+		factoryBean.setDataSource(dataSource);
+		factoryBean.setSchema("schema");
+		DatabaseDataSourceConnection bean = factoryBean.getObject();
 		assertEquals("schema", bean.getSchema());
 	}
 
 	@Test
 	public void shouldSupportDatabaseConfigBean() throws Exception {
 		DataSource dataSource = mock(DataSource.class);
-		this.factoryBean.setDataSource(dataSource);
+		factoryBean.setDataSource(dataSource);
 		DatabaseConfigBean databaseConfig = mock(DatabaseConfigBean.class);
-		this.factoryBean.setDatabaseConfig(databaseConfig);
-		DatabaseDataSourceConnection bean = this.factoryBean.getObject();
+		factoryBean.setDatabaseConfig(databaseConfig);
+		DatabaseDataSourceConnection bean = factoryBean.getObject();
 		assertNotNull(bean);
 		verify(databaseConfig).apply(bean.getConfig());
 	}
 
 	@Test
 	public void shouldBeSingleton() throws Exception {
-		assertTrue(this.factoryBean.isSingleton());
+		assertTrue(factoryBean.isSingleton());
 	}
 
 	@Test
 	public void shouldBeCorrectClass() throws Exception {
-		assertEquals(DatabaseDataSourceConnection.class, this.factoryBean.getObjectType());
+		assertEquals(DatabaseDataSourceConnection.class, factoryBean.getObjectType());
 	}
 
 	@Test
 	public void shouldCreateCreateTransactionAwareConnection() throws Exception {
 		DataSource dataSource = mock(DataSource.class);
-		this.factoryBean.setDataSource(dataSource);
-		DatabaseDataSourceConnection dataSourceConnection = this.factoryBean.getObject();
+		factoryBean.setDataSource(dataSource);
+		DatabaseDataSourceConnection dataSourceConnection = factoryBean.getObject();
 		Connection connection = dataSourceConnection.getConnection();
-		assertTrue(connection.toString() + " is not transaction aware",
-				connection.toString().startsWith("Transaction-aware proxy"));
+		assertTrue(connection.toString().startsWith("Transaction-aware proxy"),
+				connection.toString() + " is not transaction aware");
 	}
 
 	@Test
 	public void shouldNotWrapCreateTransactionAwareConnection() throws Exception {
 		DataSource dataSource = new TransactionAwareDataSourceProxy(mock(DataSource.class));
-		this.factoryBean.setDataSource(dataSource);
-		DatabaseDataSourceConnection dataSourceConnection = this.factoryBean.getObject();
+		factoryBean.setDataSource(dataSource);
+		DatabaseDataSourceConnection dataSourceConnection = factoryBean.getObject();
 		Connection connection = dataSourceConnection.getConnection();
-		assertTrue(connection.toString() + " is not transaction aware", connection.toString()
-				.startsWith("Transaction-aware proxy for target Connection  from DataSource [Mock for DataSource"));
+		assertTrue(
+				connection.toString().startsWith(
+						"Transaction-aware proxy for target Connection  from DataSource [Mock for DataSource"),
+				connection.toString() + " is not transaction aware");
 	}
 
 	@Test
@@ -133,9 +140,9 @@ public class DatabaseDataSourceConnectionFactoryBeanTest {
 		DataSource dataSource = mock(DataSource.class);
 		Connection connection = mock(Connection.class);
 		given(dataSource.getConnection()).willReturn(connection);
-		this.factoryBean.setDataSource(dataSource);
-		this.factoryBean.setTransactionAware(false);
-		DatabaseDataSourceConnection dataSourceConnection = this.factoryBean.getObject();
+		factoryBean.setDataSource(dataSource);
+		factoryBean.setTransactionAware(false);
+		DatabaseDataSourceConnection dataSourceConnection = factoryBean.getObject();
 		Connection actual = dataSourceConnection.getConnection();
 		assertSame(connection, actual);
 	}

@@ -18,10 +18,8 @@ package com.github.springtestdbunit.entity;
 
 import javax.annotation.Resource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import com.github.springtestdbunit.config.CoreTestConfiguration;
 
@@ -30,8 +28,7 @@ import com.github.springtestdbunit.config.CoreTestConfiguration;
  *
  * @author Phillip Webb
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 public class HibernateImportTest {
 
 	@Resource
@@ -39,7 +36,7 @@ public class HibernateImportTest {
 
 	@Test
 	public void shouldHaveUpdatedData() throws Exception {
-		this.entityAssert.assertValues("existing1", "existing2");
+		entityAssert.assertValues("existing1", "existing2");
 	}
 
 }

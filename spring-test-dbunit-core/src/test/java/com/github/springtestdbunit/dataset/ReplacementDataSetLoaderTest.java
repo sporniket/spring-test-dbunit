@@ -1,11 +1,12 @@
 package com.github.springtestdbunit.dataset;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ITable;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestContext;
 
 import com.github.springtestdbunit.testutils.ExtendedTestContextManager;
@@ -21,16 +22,16 @@ public class ReplacementDataSetLoaderTest {
 
 	private ReplacementDataSetLoader loader;
 
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
-		this.loader = new ReplacementDataSetLoader();
+		loader = new ReplacementDataSetLoader();
 		ExtendedTestContextManager manager = new ExtendedTestContextManager(getClass());
-		this.testContext = manager.accessTestContext();
+		testContext = manager.accessTestContext();
 	}
 
 	@Test
 	public void shouldReplaceNulls() throws Exception {
-		IDataSet dataset = this.loader.loadDataSet(this.testContext.getTestClass(), "test-replacement.xml");
+		IDataSet dataset = loader.loadDataSet(testContext.getTestClass(), "test-replacement.xml");
 		assertEquals("Sample", dataset.getTableNames()[0]);
 		ITable table = dataset.getTable("Sample");
 		assertEquals(1, table.getRowCount());

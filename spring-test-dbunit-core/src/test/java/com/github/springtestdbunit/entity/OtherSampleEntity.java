@@ -23,16 +23,16 @@ public class OtherSampleEntity {
 	private String value;
 
 	public String getValue() {
-		return this.value;
+		return value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setValue(String newValue) {
+		value = newValue;
 	}
 
 	@Override
 	public String toString() {
-		return "OtherSampleEntity{" + "id=" + this.id + ", value='" + this.value + '\'' + '}';
+		return "OtherSampleEntity{" + "id=" + id + ", value='" + value + '\'' + '}';
 	}
 
 }

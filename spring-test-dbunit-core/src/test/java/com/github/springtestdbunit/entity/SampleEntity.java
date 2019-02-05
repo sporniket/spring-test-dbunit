@@ -42,15 +42,16 @@ public class SampleEntity {
 	private String value;
 
 	public String getValue() {
-		return this.value;
+		return value;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setValue(String newValue) {
+		value = newValue;
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringCreator(this).append("id", this.id).append("value", this.value).toString();
+		return new ToStringCreator(this).append("id", id).append("value", value).toString();
 	}
+
 }

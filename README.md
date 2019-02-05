@@ -21,7 +21,7 @@ The dependencies used are:
 
 * Spring Framework 5
 * DBUnit 2.6
-* JUnit 4
+* JUnit 5
 
 ## How to use this project
 
