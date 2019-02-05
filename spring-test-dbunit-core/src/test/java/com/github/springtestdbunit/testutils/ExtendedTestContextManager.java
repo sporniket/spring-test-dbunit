@@ -36,11 +36,11 @@ public class ExtendedTestContextManager extends TestContextManager {
 		getTestContext().markApplicationContextDirty(HierarchyMode.CURRENT_LEVEL);
 		Constructor<?> constructor = testClass.getDeclaredConstructor();
 		constructor.setAccessible(true);
-		this.testInstance = constructor.newInstance();
+		testInstance = constructor.newInstance();
 	}
 
 	public void prepareTestInstance() throws Exception {
-		prepareTestInstance(this.testInstance);
+		prepareTestInstance(testInstance);
 	}
 
 	public Object getTestContextAttribute(String name) {

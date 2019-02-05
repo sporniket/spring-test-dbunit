@@ -16,11 +16,12 @@
 
 package com.github.springtestdbunit.dataset;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.dbunit.dataset.IDataSet;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestContext;
 
 import com.github.springtestdbunit.testutils.ExtendedTestContextManager;
@@ -36,29 +37,29 @@ public class FlatXmlDataSetLoaderTest {
 
 	private FlatXmlDataSetLoader loader;
 
-	@Before
+	@BeforeEach
 	public void setup() throws Exception {
-		this.loader = new FlatXmlDataSetLoader();
+		loader = new FlatXmlDataSetLoader();
 		ExtendedTestContextManager manager = new ExtendedTestContextManager(getClass());
-		this.testContext = manager.accessTestContext();
+		testContext = manager.accessTestContext();
 	}
 
 	@Test
 	public void shouldSenseColumns() throws Exception {
-		IDataSet dataset = this.loader.loadDataSet(this.testContext.getTestClass(), "test-column-sensing.xml");
+		IDataSet dataset = loader.loadDataSet(testContext.getTestClass(), "test-column-sensing.xml");
 		assertEquals(null, dataset.getTable("Sample").getValue(0, "name"));
 		assertEquals("test", dataset.getTable("Sample").getValue(1, "name"));
 	}
 
 	@Test
 	public void shouldLoadFromRelativeFile() throws Exception {
-		IDataSet dataset = this.loader.loadDataSet(this.testContext.getTestClass(), "test.xml");
+		IDataSet dataset = loader.loadDataSet(testContext.getTestClass(), "test.xml");
 		assertEquals("Sample", dataset.getTableNames()[0]);
 	}
 
 	@Test
 	public void shouldReturnNullOnMissingFile() throws Exception {
-		IDataSet dataset = this.loader.loadDataSet(this.testContext.getTestClass(), "doesnotexist.xml");
+		IDataSet dataset = loader.loadDataSet(testContext.getTestClass(), "doesnotexist.xml");
 		assertNull(dataset);
 	}
 

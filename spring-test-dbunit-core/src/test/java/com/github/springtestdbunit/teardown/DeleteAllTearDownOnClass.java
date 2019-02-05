@@ -16,12 +16,10 @@
 
 package com.github.springtestdbunit.teardown;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +30,7 @@ import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 import com.github.springtestdbunit.testutils.AfterTearDownDbUnitTestExecutionListener;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @DbUnitConfiguration(databaseConnection = "databaseDataSourceConnectionFactory")
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		AfterTearDownDbUnitTestExecutionListener.class })
@@ -46,11 +43,11 @@ public class DeleteAllTearDownOnClass {
 
 	@Test
 	public void test() {
-		this.entityAssert.assertValues("existing1", "existing2");
+		entityAssert.assertValues("existing1", "existing2");
 	}
 
 	public void afterTest() {
-		this.entityAssert.assertValues("existing2");
+		entityAssert.assertValues("existing2");
 	}
 
 }

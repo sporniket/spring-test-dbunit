@@ -16,7 +16,8 @@
 
 package com.github.springtestdbunit.testutils;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import org.springframework.test.context.TestContext;
 
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
@@ -36,7 +37,7 @@ public class MustFailDbUnitTestExecutionListener extends TransactionDbUnitTestEx
 		} catch (Throwable ex) {
 			caught = ex;
 		}
-		Assert.assertNotNull("Test did not fail", caught);
+		assertNotNull(caught, "Test did not fail");
 	}
 
 }

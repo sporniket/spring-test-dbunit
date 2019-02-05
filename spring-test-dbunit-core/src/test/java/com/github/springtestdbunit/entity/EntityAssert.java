@@ -16,7 +16,7 @@
 
 package com.github.springtestdbunit.entity;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,22 +47,22 @@ public class EntityAssert implements InitializingBean {
 
 	public void afterPropertiesSet() throws Exception {
 
-		CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
-		this.criteriaQuery = cb.createQuery(SampleEntity.class);
-		Root<SampleEntity> from = this.criteriaQuery.from(SampleEntity.class);
-		this.criteriaQuery.orderBy(cb.asc(from.get("value").as(String.class)));
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		criteriaQuery = cb.createQuery(SampleEntity.class);
+		Root<SampleEntity> from = criteriaQuery.from(SampleEntity.class);
+		criteriaQuery.orderBy(cb.asc(from.get("value").as(String.class)));
 	}
 
 	public void assertValues(String... values) {
 
 		SortedSet<String> expected = new TreeSet<String>(Arrays.asList(values));
 		SortedSet<String> actual = new TreeSet<String>();
-		TypedQuery<SampleEntity> query = this.entityManager.createQuery(this.criteriaQuery);
+		TypedQuery<SampleEntity> query = entityManager.createQuery(criteriaQuery);
 		List<SampleEntity> results = query.getResultList();
 
 		for (SampleEntity sampleEntity : results) {
 			actual.add(sampleEntity.getValue());
-			this.entityManager.detach(sampleEntity);
+			entityManager.detach(sampleEntity);
 		}
 
 		assertEquals(expected, actual);

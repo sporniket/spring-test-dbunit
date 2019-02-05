@@ -18,12 +18,10 @@ package com.github.springtestdbunit.expected;
 
 import org.dbunit.dataset.Column;
 import org.dbunit.dataset.filter.IColumnFilter;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +31,7 @@ import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class })
 @Transactional
 public class ExpectedNonStrictWithDtdTest {
@@ -46,7 +43,7 @@ public class ExpectedNonStrictWithDtdTest {
 	@ExpectedDatabase(value = "/META-INF/db/expected_nonstrict_with_dtd.xml", assertionMode = DatabaseAssertionMode.NON_STRICT, columnFilters = {
 			SampleEntityIdExclusionFilter.class })
 	public void shouldNotFailEvenThoughExpectedTableDoesNotSpecifyAllColumns() {
-		this.entityAssert.assertValues("existing1", "existing2");
+		entityAssert.assertValues("existing1", "existing2");
 	}
 
 	public static class SampleEntityIdExclusionFilter implements IColumnFilter {

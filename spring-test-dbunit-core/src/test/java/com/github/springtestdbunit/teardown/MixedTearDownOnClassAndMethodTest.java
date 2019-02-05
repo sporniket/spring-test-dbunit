@@ -16,12 +16,10 @@
 
 package com.github.springtestdbunit.teardown;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +29,7 @@ import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 import com.github.springtestdbunit.testutils.AfterTearDownDbUnitTestExecutionListener;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		AfterTearDownDbUnitTestExecutionListener.class })
 @DatabaseTearDown("/META-INF/db/insert.xml")
@@ -45,10 +42,10 @@ public class MixedTearDownOnClassAndMethodTest {
 	@Test
 	@DatabaseTearDown(value = "/META-INF/db/insert2.xml", type = DatabaseOperation.INSERT)
 	public void testInsert() throws Exception {
-		this.entityAssert.assertValues("existing1", "existing2");
+		entityAssert.assertValues("existing1", "existing2");
 	}
 
 	public void afterTest() throws Exception {
-		this.entityAssert.assertValues("fromDbUnit", "fromDbUnit2");
+		entityAssert.assertValues("fromDbUnit", "fromDbUnit2");
 	}
 }

@@ -15,17 +15,15 @@
  */
 package com.github.springtestdbunit.sample.service;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
@@ -34,8 +32,7 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.sample.config.SampleTestConfiguration;
 import com.github.springtestdbunit.sample.entity.Person;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = SampleTestConfiguration.class)
+@SpringJUnitConfig(SampleTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class })
 public class PersonServiceTest {
 
@@ -45,7 +42,7 @@ public class PersonServiceTest {
 	@Test
 	@DatabaseSetup("sampleData.xml")
 	public void testFind() throws Exception {
-		List<Person> personList = this.personService.find("hil");
+		List<Person> personList = personService.find("hil");
 		assertEquals(1, personList.size());
 		assertEquals("Phillip", personList.get(0).getFirstName());
 	}
@@ -54,7 +51,7 @@ public class PersonServiceTest {
 	@DatabaseSetup("sampleData.xml")
 	@ExpectedDatabase("expectedData.xml")
 	public void testRemove() throws Exception {
-		this.personService.remove(1);
+		personService.remove(1);
 	}
 
 }

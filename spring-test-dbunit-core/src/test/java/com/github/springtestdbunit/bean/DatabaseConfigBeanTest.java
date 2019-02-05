@@ -16,7 +16,9 @@
 
 package com.github.springtestdbunit.bean;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
 import java.util.HashSet;
@@ -29,8 +31,8 @@ import org.dbunit.database.IResultSetTableFactory;
 import org.dbunit.database.statement.IStatementFactory;
 import org.dbunit.dataset.datatype.IDataTypeFactory;
 import org.dbunit.dataset.filter.IColumnFilter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -54,21 +56,21 @@ public class DatabaseConfigBeanTest {
 
 	private BeanWrapper configBeanWrapper;
 
-	@Before
+	@BeforeEach
 	public void setup() {
-		this.configBean = new DatabaseConfigBean();
-		this.configBeanWrapper = new BeanWrapperImpl(this.configBean);
+		configBean = new DatabaseConfigBean();
+		configBeanWrapper = new BeanWrapperImpl(configBean);
 	}
 
 	@Test
 	public void shouldAllowSetOfNonMandatoryFieldToNull() throws Exception {
-		this.configBean.setPrimaryKeyFilter(null);
+		configBean.setPrimaryKeyFilter(null);
 	}
 
 	@Test
 	public void shouldFailWhenSetingMandatoryFieldToNull() throws Exception {
 		try {
-			this.configBean.setDatatypeFactory(null);
+			configBean.setDatatypeFactory(null);
 			fail();
 		} catch (IllegalArgumentException ex) {
 			assertEquals("dataTypeFactory cannot be null", ex.getMessage());
@@ -147,23 +149,23 @@ public class DatabaseConfigBeanTest {
 	}
 
 	private void doTest(String propertyName, String databaseConfigProperty, Object newValue) {
-		Object initialValue = this.configBeanWrapper.getPropertyValue(propertyName);
-		Object expectedInitialValue = this.defaultConfig.getProperty(databaseConfigProperty);
+		Object initialValue = configBeanWrapper.getPropertyValue(propertyName);
+		Object expectedInitialValue = defaultConfig.getProperty(databaseConfigProperty);
 
 		if ((initialValue != null) && CLASS_COMPARE_ONLY.contains(initialValue.getClass())) {
-			assertEquals("Initial value is not as expected", initialValue.getClass(), expectedInitialValue.getClass());
+			assertEquals(initialValue.getClass(), expectedInitialValue.getClass(), "Initial value is not as expected");
 
 		} else {
-			assertEquals("Initial value is not as expected", initialValue, expectedInitialValue);
+			assertEquals(initialValue, expectedInitialValue, "Initial value is not as expected");
 		}
 
-		assertFalse("Unable to test if new value is same as intial value", newValue.equals(initialValue));
-		this.configBeanWrapper.setPropertyValue(propertyName, newValue);
+		assertFalse(newValue.equals(initialValue), "Unable to test if new value is same as intial value");
+		configBeanWrapper.setPropertyValue(propertyName, newValue);
 		DatabaseConfig appliedConfig = new DatabaseConfig();
-		this.configBean.apply(appliedConfig);
+		configBean.apply(appliedConfig);
 
-		assertEquals("Did not replace " + propertyName + " value", newValue,
-				appliedConfig.getProperty(databaseConfigProperty));
+		assertEquals(newValue, appliedConfig.getProperty(databaseConfigProperty),
+				"Did not replace " + propertyName + " value");
 
 	}
 

@@ -16,7 +16,7 @@
 
 package com.github.springtestdbunit.multiconnection;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,14 +24,12 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +41,7 @@ import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class, })
 @DbUnitConfiguration(databaseConnection = { "dataSource", "dataSource2" })
@@ -64,7 +61,7 @@ public class MultiConnectionTest {
 	@DatabaseSetup(value = "/META-INF/db/insert2.xml", type = DatabaseOperation.INSERT)
 	@DatabaseSetup(connection = "dataSource2", value = "/META-INF/db/multi-insert2.xml", type = DatabaseOperation.INSERT)
 	public void testInsert() throws Exception {
-		this.entityAssert.assertValues("fromDbUnit", "fromDbUnit2");
+		entityAssert.assertValues("fromDbUnit", "fromDbUnit2");
 		assertSecondDataSourceValues("fromDbUnitSecondConnection", "fromDbUnitSecondConnection2");
 	}
 
@@ -72,19 +69,19 @@ public class MultiConnectionTest {
 	@DatabaseSetup(value = "/META-INF/db/refresh.xml", type = DatabaseOperation.REFRESH)
 	@DatabaseSetup(connection = "dataSource2", value = "/META-INF/db/multi-refresh.xml", type = DatabaseOperation.REFRESH)
 	public void testRefresh() throws Exception {
-		this.entityAssert.assertValues("addedFromDbUnit", "replacedFromDbUnit");
+		entityAssert.assertValues("addedFromDbUnit", "replacedFromDbUnit");
 		assertSecondDataSourceValues("addedFromDbUnitSecondConnection", "replacedFromDbUnitSecondConnection");
 	}
 
 	@Test
 	@ExpectedDatabase(connection = "dataSource2", value = "/META-INF/db/multi-expected.xml")
 	public void testExpected() throws Exception {
-		JdbcTemplate jdbc = new JdbcTemplate(this.dataSource);
+		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 		jdbc.execute("insert into second(id, value) values (200, 'abc')");
 	}
 
 	private void assertSecondDataSourceValues(String... expected) {
-		JdbcTemplate jdbc = new JdbcTemplate(this.dataSource);
+		JdbcTemplate jdbc = new JdbcTemplate(dataSource);
 		List<String> actual = jdbc.queryForList("select value from second", String.class);
 		assertEquals(new HashSet<String>(Arrays.asList(expected)), new HashSet<String>(actual));
 	}

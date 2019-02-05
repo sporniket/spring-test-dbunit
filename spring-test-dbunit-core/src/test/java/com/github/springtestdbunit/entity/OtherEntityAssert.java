@@ -16,7 +16,7 @@
 
 package com.github.springtestdbunit.entity;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
 import java.util.List;
@@ -47,22 +47,22 @@ public class OtherEntityAssert implements InitializingBean {
 
 	public void afterPropertiesSet() throws Exception {
 
-		CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
-		this.criteriaQuery = cb.createQuery(OtherSampleEntity.class);
-		Root<OtherSampleEntity> from = this.criteriaQuery.from(OtherSampleEntity.class);
-		this.criteriaQuery.orderBy(cb.asc(from.get("value").as(String.class)));
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+		criteriaQuery = cb.createQuery(OtherSampleEntity.class);
+		Root<OtherSampleEntity> from = criteriaQuery.from(OtherSampleEntity.class);
+		criteriaQuery.orderBy(cb.asc(from.get("value").as(String.class)));
 	}
 
 	public void assertValues(String... values) {
 
 		SortedSet<String> expected = new TreeSet<String>(Arrays.asList(values));
 		SortedSet<String> actual = new TreeSet<String>();
-		TypedQuery<OtherSampleEntity> query = this.entityManager.createQuery(this.criteriaQuery);
+		TypedQuery<OtherSampleEntity> query = entityManager.createQuery(criteriaQuery);
 		List<OtherSampleEntity> results = query.getResultList();
 
 		for (OtherSampleEntity sampleEntity : results) {
 			actual.add(sampleEntity.getValue());
-			this.entityManager.detach(sampleEntity);
+			entityManager.detach(sampleEntity);
 		}
 
 		assertEquals(expected, actual);

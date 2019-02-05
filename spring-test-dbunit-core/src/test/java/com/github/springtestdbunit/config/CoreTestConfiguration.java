@@ -73,7 +73,7 @@ public class CoreTestConfiguration {
 	public DatabaseConfigBean databaseConfig() {
 
 		DatabaseConfigBean databaseConfig = new DatabaseConfigBean();
-		databaseConfig.setDatatypeFactory(this.dataTypeFactory);
+		databaseConfig.setDatatypeFactory(dataTypeFactory);
 
 		return databaseConfig;
 	}
@@ -82,7 +82,7 @@ public class CoreTestConfiguration {
 	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory() {
 
 		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
-				this.dataSource);
+				dataSource);
 		databaseDataSourceConnectionFactory.setDatabaseConfig(databaseConfig());
 
 		return databaseDataSourceConnectionFactory;
@@ -116,11 +116,11 @@ public class CoreTestConfiguration {
 	public HikariConfig hikariConfig2() {
 
 		HikariConfig hikariConfig = new HikariConfig();
-		hikariConfig.setPoolName(this.dataSourcePoolName + "2");
-		hikariConfig.setDriverClassName(this.dataSourceDriver);
-		hikariConfig.setJdbcUrl(this.dataSourceUrl + "2");
-		hikariConfig.setUsername(this.dataSourceUsername);
-		hikariConfig.setPassword(this.dataSourcePassword);
+		hikariConfig.setPoolName(dataSourcePoolName + "2");
+		hikariConfig.setDriverClassName(dataSourceDriver);
+		hikariConfig.setJdbcUrl(dataSourceUrl + "2");
+		hikariConfig.setUsername(dataSourceUsername);
+		hikariConfig.setPassword(dataSourcePassword);
 		hikariConfig.setMaximumPoolSize(50);
 
 		return hikariConfig;

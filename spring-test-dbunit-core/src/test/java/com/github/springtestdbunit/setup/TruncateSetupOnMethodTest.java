@@ -16,12 +16,10 @@
 
 package com.github.springtestdbunit.setup;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +29,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class })
 @Transactional
@@ -44,13 +41,13 @@ public class TruncateSetupOnMethodTest {
 	@Test
 	@DatabaseSetup(type = DatabaseOperation.TRUNCATE_TABLE, value = "/META-INF/db/delete.xml")
 	public void test() throws Exception {
-		this.entityAssert.assertValues();
+		entityAssert.assertValues();
 	}
 
 	@Test
 	@DatabaseSetup(type = DatabaseOperation.TRUNCATE_TABLE)
 	public void testAllTables() throws Exception {
-		this.entityAssert.assertValues();
+		entityAssert.assertValues();
 	}
 
 }

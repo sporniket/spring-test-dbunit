@@ -16,12 +16,10 @@
 
 package com.github.springtestdbunit.setup;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,8 +29,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class })
 @DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = { "/META-INF/db/insert.xml", "/META-INF/db/insert2.xml" })
@@ -44,7 +41,7 @@ public class MultipleInsertSetupOnClassTest {
 
 	@Test
 	public void test() throws Exception {
-		this.entityAssert.assertValues("fromDbUnit", "fromDbUnit2");
+		entityAssert.assertValues("fromDbUnit", "fromDbUnit2");
 	}
 
 }

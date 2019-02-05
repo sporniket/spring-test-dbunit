@@ -16,12 +16,10 @@
 
 package com.github.springtestdbunit.setup;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +30,7 @@ import com.github.springtestdbunit.config.CoreTestConfiguration;
 import com.github.springtestdbunit.entity.EntityAssert;
 import com.github.springtestdbunit.entity.OtherEntityAssert;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = CoreTestConfiguration.class)
+@SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class })
 @Transactional
@@ -48,16 +45,16 @@ public class CleanInsertSetupOnMethodTest {
 	@Test
 	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = "/META-INF/db/insert.xml")
 	public void test() throws Exception {
-		this.entityAssert.assertValues("fromDbUnit");
+		entityAssert.assertValues("fromDbUnit");
 	}
 
 	@Test
 	@DatabaseSetup(type = DatabaseOperation.CLEAN_INSERT, value = { "/META-INF/db/insert.xml",
 			"/META-INF/db/insert_Other.xml" })
 	public void testSeveralSetupFiles() throws Exception {
-		this.entityAssert.assertValues("fromDbUnit");
+		entityAssert.assertValues("fromDbUnit");
 		// OtherSampleEntity is populated using import.sql imitating dirty state of the table
-		this.otherEntityAssert.assertValues("fromDbUnit");
+		otherEntityAssert.assertValues("fromDbUnit");
 	}
 
 }
