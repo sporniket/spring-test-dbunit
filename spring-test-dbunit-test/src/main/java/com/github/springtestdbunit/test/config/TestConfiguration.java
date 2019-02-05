@@ -23,9 +23,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.dbunit.dataset.datatype.IDataTypeFactory;
-import org.dbunit.ext.hsqldb.HsqldbDataTypeFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -42,7 +43,38 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 @Configuration
 @EnableTransactionManagement
+@PropertySource("classpath:properties/database.properties")
 public class TestConfiguration {
+
+	@Value("${database.datasource.poolname}")
+	private String dataSourcePoolName;
+
+	@Value("${database.datasource.driver}")
+	private String dataSourceDriver;
+
+	@Value("${database.datasource.url}")
+	private String dataSourceUrl;
+
+	@Value("${database.datasource.username}")
+	private String dataSourceUsername;
+
+	@Value("${database.datasource.password}")
+	private String dataSourcePassword;
+
+	@Value("${database.dbunit.dataTypeFactory}")
+	private String dbUnitDataTypeFactory;
+
+	@Value("${database.hibernate.dialect}")
+	private String hibernateDialect;
+
+	@Value("${database.hibernate.format_sql}")
+	private boolean hibernateFormatSql;
+
+	@Value("${database.hibernate.show_sql}")
+	private boolean hibernateShowSql;
+
+	@Value("${database.hibernate.hbm2ddl.auto}")
+	private String hibernateHbm2DdlAuto;
 
 	@Resource
 	private List<String> hibernatePackagesToScan;
@@ -53,8 +85,9 @@ public class TestConfiguration {
 	}
 
 	@Bean
-	public IDataTypeFactory dataTypeFactory() {
-		return new HsqldbDataTypeFactory();
+	public IDataTypeFactory dataTypeFactory()
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+		return (IDataTypeFactory) Class.forName(this.dbUnitDataTypeFactory).newInstance();
 	}
 
 	@Bean
@@ -65,10 +98,10 @@ public class TestConfiguration {
 		vendorAdapter.setShowSql(true);
 
 		Properties jpaProperties = new Properties();
-		jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-		jpaProperties.put("hibernate.format_sql", true);
-		jpaProperties.put("hibernate.show_sql", true);
-		jpaProperties.put("hibernate.hbm2ddl.auto", "create-drop");
+		jpaProperties.put("hibernate.dialect", this.hibernateDialect);
+		jpaProperties.put("hibernate.format_sql", this.hibernateFormatSql);
+		jpaProperties.put("hibernate.show_sql", this.hibernateShowSql);
+		jpaProperties.put("hibernate.hbm2ddl.auto", this.hibernateHbm2DdlAuto);
 		jpaProperties.put("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider");
 		jpaProperties.put("hibernate.id.new_generator_mappings", "true");
 
@@ -88,11 +121,11 @@ public class TestConfiguration {
 	public HikariConfig hikariConfig() {
 
 		HikariConfig hikariConfig = new HikariConfig();
-		hikariConfig.setPoolName("springHikariCP");
-		hikariConfig.setDriverClassName("org.hsqldb.jdbcDriver");
-		hikariConfig.setJdbcUrl("jdbc:hsqldb:mem:springtestdbunit");
-		hikariConfig.setUsername("sa");
-		hikariConfig.setPassword("");
+		hikariConfig.setPoolName(this.dataSourcePoolName);
+		hikariConfig.setDriverClassName(this.dataSourceDriver);
+		hikariConfig.setJdbcUrl(this.dataSourceUrl);
+		hikariConfig.setUsername(this.dataSourceUsername);
+		hikariConfig.setPassword(this.dataSourcePassword);
 		hikariConfig.setMaximumPoolSize(50);
 
 		return hikariConfig;
