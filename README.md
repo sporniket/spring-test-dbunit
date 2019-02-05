@@ -19,7 +19,7 @@ The versioning of this project follows the one of the Spring Framework:
 
 The dependencies used are:
 
-* Spring Framework 4
+* Spring Framework 5
 * DBUnit 2.6
 * JUnit 4
 
