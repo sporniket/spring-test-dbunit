@@ -48,8 +48,20 @@ import com.zaxxer.hikari.HikariDataSource;
 @Import(TestConfiguration.class)
 public class CoreTestConfiguration {
 
-	@Value("${database.hibernate.hbm2ddl.import_files}")
-	private String databaseImportFiles;
+	@Value("${database.datasource.poolname}")
+	private String dataSourcePoolName;
+
+	@Value("${database.datasource.driver}")
+	private String dataSourceDriver;
+
+	@Value("${database.datasource.url}")
+	private String dataSourceUrl;
+
+	@Value("${database.datasource.username}")
+	private String dataSourceUsername;
+
+	@Value("${database.datasource.password}")
+	private String dataSourcePassword;
 
 	@Resource
 	private IDataTypeFactory dataTypeFactory;
@@ -104,11 +116,11 @@ public class CoreTestConfiguration {
 	public HikariConfig hikariConfig2() {
 
 		HikariConfig hikariConfig = new HikariConfig();
-		hikariConfig.setPoolName("springHikariCP2");
-		hikariConfig.setDriverClassName("org.hsqldb.jdbcDriver");
-		hikariConfig.setJdbcUrl("jdbc:hsqldb:mem:springtestdbunit2");
-		hikariConfig.setUsername("sa");
-		hikariConfig.setPassword("");
+		hikariConfig.setPoolName(this.dataSourcePoolName + "2");
+		hikariConfig.setDriverClassName(this.dataSourceDriver);
+		hikariConfig.setJdbcUrl(this.dataSourceUrl + "2");
+		hikariConfig.setUsername(this.dataSourceUsername);
+		hikariConfig.setPassword(this.dataSourcePassword);
 		hikariConfig.setMaximumPoolSize(50);
 
 		return hikariConfig;
