@@ -28,28 +28,31 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.github.springtestdbunit.annotation.DbUnitConfiguration;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
+import com.github.springtestdbunit.dataset.XlsDataSetLoader;
 import com.github.springtestdbunit.sample.config.SampleTestConfiguration;
 import com.github.springtestdbunit.sample.entity.Person;
 
 @SpringJUnitConfig(SampleTestConfiguration.class)
+@DbUnitConfiguration(dataSetLoader = XlsDataSetLoader.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class, DbUnitTestExecutionListener.class })
-public class PersonServiceTest {
+public class PersonServiceXlsTest {
 
 	@Resource
 	private PersonService personService;
 
 	@Test
-	@DatabaseSetup("sampleData.xml")
+	@DatabaseSetup("sampleData.xls")
 	public void testFind() throws Exception {
-		List<Person> personList = personService.find("hil");
-		assertEquals(1, personList.size());
-		assertEquals("Phillip", personList.get(0).getFirstName());
+		List<Person> personList = personService.find("gor");
+		assertEquals(1, personList.size(), "Wrong number of results");
+		assertEquals("Paul", personList.get(0).getFirstName(), "Wrong user");
 	}
 
 	@Test
-	@DatabaseSetup("sampleData.xml")
-	@ExpectedDatabase("expectedData.xml")
+	@DatabaseSetup("sampleData.xls")
+	@ExpectedDatabase("expectedData.xls")
 	public void testRemove() throws Exception {
 		personService.remove(1);
 	}

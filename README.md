@@ -210,8 +210,12 @@ NOTE: In most circumstances the username and password properties should not be s
 
 ## Writing a DataSet Loader
 
-By default DBUnit datasets are loaded from flat XML files. If you need to load data from another source you will need
-to write your own DataSet loader and configure your tests to use it. Custom loaders must implement the `DataSetLoader` interface and provide an implementation of the `loadDataSet` method. The `AbstractDataSetLoader` is also available and provides a convenient base class for most loaders.
+Several dataset loaders are already available to read from:
+
+* flat XML files, (default)
+* XLS files.
+
+If you need to load data from another source you will need to write your own DataSet loader and configure your tests to use it. Custom loaders must implement the `DataSetLoader` interface and provide an implementation of the `loadDataSet` method. The `AbstractDataSetLoader` is also available and provides a convenient base class for most loaders.
 
 Here is an example loader that reads data from a CSV formatted file.
 
@@ -221,14 +225,22 @@ Here is an example loader that reads data from a CSV formatted file.
         }
     }
 
-See above for details of how to configure a test class to use the loader.
-
 ## Custom DBUnit Database Operations
 
 In some situations you may need to use custom DBUnit DatabaseOperation classes. For example, DBUnit includes
 `org.dbunit.ext.mssql.InsertIdentityOperation` for use with Microsoft SQL Server. The `DatabaseOperationLookup` interface can be used to create your own lookup strategy if you need support custom operations. A `MicrosoftSqlDatabaseOperationLookup` class is provided to support the aforementioned MSSQL operations.
 
 See above for details of how to configure a test class to use the custom lookup.
+
+## Known issues
+
+### NullPointerException when loading XLS files
+
+A NullPointerException can sometimes occur when loading data from XLS files. This issue is related to how the XLS file was edited. Once content has been submitted into cells and even if these cells are later made blank, the XLS file might still store those empty cells. This will cause the line count for the file to be incorrect, hence the exception.
+
+The solution is quite easy, simply delete the last rows of your file, even if they already seem blank.
+
+You can check the resolution by debugging `org.dbunit.dataset.excel.XlsTable.getRowCount()` and making sure it returns the correct number of rows.
 
 ## Please contribute!
 
