@@ -32,14 +32,14 @@ import com.github.springtestdbunit.entity.EntityAssert;
 @SpringJUnitConfig(CoreTestConfiguration.class)
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class })
-@DatabaseSetup(type = DatabaseOperation.REFRESH, value = "/META-INF/db/refresh.xml")
 @Transactional
-public class RefereshSetupOnClassTest {
+public class RefreshSetupOnMethodTest {
 
 	@Autowired
 	private EntityAssert entityAssert;
 
 	@Test
+	@DatabaseSetup(type = DatabaseOperation.REFRESH, value = "/META-INF/db/refresh.xml")
 	public void test() throws Exception {
 		entityAssert.assertValues("existing2", "addedFromDbUnit", "replacedFromDbUnit");
 	}
