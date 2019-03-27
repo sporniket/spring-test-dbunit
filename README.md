@@ -208,22 +208,28 @@ In some situations you may need to create an `IDatabaseConnection` with a specif
 NOTE: In most circumstances the username and password properties should not be set on the
 `DatabaseDataSourceConnectionFactoryBean`. These properties will cause DBUnit to start a new transaction and may cause unexpected behaviour.
 
-## Writing a DataSet Loader
+## DataSet loaders
 
 Several dataset loaders are already available to read from:
 
 * flat XML files, (default)
+* CSV files,
 * XLS files.
 
 If you need to load data from another source you will need to write your own DataSet loader and configure your tests to use it. Custom loaders must implement the `DataSetLoader` interface and provide an implementation of the `loadDataSet` method. The `AbstractDataSetLoader` is also available and provides a convenient base class for most loaders.
 
-Here is an example loader that reads data from a CSV formatted file.
+### CSV datasets configuration
 
-    public class CsvDataSetLoader extends AbstractDataSetLoader {
-        protected IDataSet createDataSet(Resource resource) throws Exception {
-            return new CsvURLDataSet(resource.getURL());
-        }
-    }
+Unlike XML and XLS files, CSV files have a very basic structure which doesn't allow multiple tables to be defined in a single file.
+
+The CSV dataset loader therefore relies on a folder containing:
+
+* a `table-ordering.txt` file listing the tables in the order they should be imported,
+* a dedicated `<table name>.csv` file for each table which has to be imported.
+
+The dataset parameter should therefore point to that folder, not to individual files.
+
+Another point to keep in mind is that the current implementation of DBUnit uses commas as a value separator, not semicolons.
 
 ## Custom DBUnit Database Operations
 
