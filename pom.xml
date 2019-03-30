@@ -247,10 +247,10 @@
 								<goal>run</goal>
 							</goals>
 							<configuration>
-								<tasks>
+								<target>
 									<copy file="../README.md"
 										tofile="src/site/markdown/index.md" overwrite="true" />
-								</tasks>
+								</target>
 							</configuration>
 						</execution>
 						<execution>
@@ -260,7 +260,7 @@
 								<goal>run</goal>
 							</goals>
 							<configuration>
-								<tasks>
+								<target>
 									<replace
 										file="${project.build.directory}/site/index.html"
 										token="&lt;title&gt;&lt;/title&gt;"
@@ -273,7 +273,7 @@
 										file="${project.build.directory}/site/sample.html"
 										token="&lt;title&gt;&lt;/title&gt;"
 										value="&lt;title&gt;Quick Start Example&lt;/title&gt;" />
-								</tasks>
+								</target>
 							</configuration>
 						</execution>
 					</executions>
@@ -415,7 +415,7 @@
 						<configuration>
 							<!-- Place any Ant tasks here. You can add anything you can add between 
 								<target> and </target> in a build.xml. -->
-							<tasks>
+							<target>
 								<taskdef
 									resource="net/sf/antcontrib/antcontrib.properties"
 									classpathref="maven.plugin.classpath" />
@@ -432,7 +432,7 @@
 								<copy file="${config.path.prefix}/LICENSE"
 									tofile="${config.path.output}/apidocs/META-INF/LICENSE"
 									failonerror="true" />
-							</tasks>
+							</target>
 						</configuration>
 					</execution>
 				</executions>
