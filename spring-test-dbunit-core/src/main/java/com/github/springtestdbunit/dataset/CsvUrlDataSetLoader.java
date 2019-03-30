@@ -16,6 +16,9 @@
  */
 package com.github.springtestdbunit.dataset;
 
+import java.io.IOException;
+
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvURLDataSet;
 import org.springframework.core.io.Resource;
@@ -28,7 +31,7 @@ import org.springframework.core.io.Resource;
 public class CsvUrlDataSetLoader extends AbstractDataSetLoader {
 
 	@Override
-	protected IDataSet createDataSet(Resource resource) throws Exception {
+	protected IDataSet createDataSet(Resource resource) throws DataSetException, IOException {
 		return new CsvURLDataSet(resource.getURL());
 	}
 

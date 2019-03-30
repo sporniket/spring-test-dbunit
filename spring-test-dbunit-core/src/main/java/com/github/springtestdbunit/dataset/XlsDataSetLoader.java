@@ -16,8 +16,10 @@
  */
 package com.github.springtestdbunit.dataset;
 
+import java.io.IOException;
 import java.io.InputStream;
 
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.excel.XlsDataSet;
 import org.springframework.core.io.Resource;
@@ -30,7 +32,7 @@ import org.springframework.core.io.Resource;
 public class XlsDataSetLoader extends AbstractDataSetLoader {
 
 	@Override
-	protected IDataSet createDataSet(final Resource resource) throws Exception {
+	protected IDataSet createDataSet(final Resource resource) throws IOException, DataSetException {
 
 		InputStream inputStream = resource.getInputStream();
 

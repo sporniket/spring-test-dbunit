@@ -1,9 +1,11 @@
 package com.github.springtestdbunit.dataset;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.ReplacementDataSet;
 import org.springframework.util.Assert;
@@ -73,10 +75,10 @@ public class ReplacementDataSetLoader implements DataSetLoader {
 		return Collections.unmodifiableMap(result);
 	}
 
-	public IDataSet loadDataSet(Class<?> testClass, String location) throws Exception {
-		IDataSet dataSet = this.dataSetLoader.loadDataSet(testClass, location);
-		ReplacementDataSet replacementDataSet = new ReplacementDataSet(dataSet, this.objectReplacements,
-				this.subStringReplacements);
+	public IDataSet loadDataSet(Class<?> testClass, String location) throws DataSetException, IOException {
+		IDataSet dataSet = dataSetLoader.loadDataSet(testClass, location);
+		ReplacementDataSet replacementDataSet = new ReplacementDataSet(dataSet, objectReplacements,
+				subStringReplacements);
 		return replacementDataSet;
 	}
 

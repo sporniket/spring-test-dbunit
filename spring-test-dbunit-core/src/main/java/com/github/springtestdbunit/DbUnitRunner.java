@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors
+ * Copyright 2002-2019 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.github.springtestdbunit;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.sql.SQLException;
@@ -66,10 +67,14 @@ public class DbUnitRunner {
 
 	/**
 	 * Called before a test method is executed to perform any database setup.
+	 *
 	 * @param testContext The test context
-	 * @throws Exception
+	 * @throws DatabaseUnitException If a dataset could not be imported into the database.
+	 * @throws IOException If a dataset could not be loaded.
+	 * @throws SQLException If the dataset corresponding to the entire database could not be loaded.
 	 */
-	public void beforeTestMethod(DbUnitTestContext testContext) throws Exception {
+	public void beforeTestMethod(DbUnitTestContext testContext)
+			throws IOException, SQLException, DatabaseUnitException {
 		Annotations<DatabaseSetup> annotations = Annotations.get(testContext, DatabaseSetups.class,
 				DatabaseSetup.class);
 		setupOrTeardown(testContext, true, AnnotationAttributes.get(annotations));
@@ -77,10 +82,16 @@ public class DbUnitRunner {
 
 	/**
 	 * Called after a test method is executed to perform any database teardown and to check expected results.
+	 *
 	 * @param testContext The test context
-	 * @throws Exception
+	 * @throws SQLException An exception thrown if the test connections cannot be closed.
+	 * @throws DatabaseUnitException If a dataset could not be imported into the database.
+	 * @throws IOException An exception thrown if a dataset could not be loaded.
+	 * @throws IllegalAccessException If a database column filter could not be initialised.
+	 * @throws InstantiationException If a database column filter could not be initialised.
 	 */
-	public void afterTestMethod(DbUnitTestContext testContext) throws Exception {
+	public void afterTestMethod(DbUnitTestContext testContext)
+			throws SQLException, IOException, DatabaseUnitException, InstantiationException, IllegalAccessException {
 		try {
 			try {
 				verifyExpected(testContext,
@@ -105,7 +116,8 @@ public class DbUnitRunner {
 	}
 
 	private void verifyExpected(DbUnitTestContext testContext, Annotations<ExpectedDatabase> annotations)
-			throws Exception {
+			throws DataSetException, SQLException, DatabaseUnitException, InstantiationException,
+			IllegalAccessException, IOException {
 		if (testContext.getTestException() != null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Skipping @DatabaseTest expectation due to test exception "
@@ -128,8 +140,8 @@ public class DbUnitRunner {
 	}
 
 	private void verifyExpected(DbUnitTestContext testContext, DatabaseConnections connections,
-			DataSetModifier modifier, ExpectedDatabase annotation)
-			throws Exception, DataSetException, SQLException, DatabaseUnitException {
+			DataSetModifier modifier, ExpectedDatabase annotation) throws DataSetException, SQLException,
+			DatabaseUnitException, InstantiationException, IllegalAccessException, IOException {
 
 		String query = annotation.query();
 		String table = annotation.table();
@@ -168,7 +180,7 @@ public class DbUnitRunner {
 	}
 
 	private void setupOrTeardown(DbUnitTestContext testContext, boolean isSetup,
-			Collection<AnnotationAttributes> annotations) throws Exception {
+			Collection<AnnotationAttributes> annotations) throws IOException, SQLException, DatabaseUnitException {
 		DatabaseConnections connections = testContext.getConnections();
 		for (AnnotationAttributes annotation : annotations) {
 			List<IDataSet> datasets = loadDataSets(testContext, annotation);
@@ -187,7 +199,7 @@ public class DbUnitRunner {
 	}
 
 	private List<IDataSet> loadDataSets(DbUnitTestContext testContext, AnnotationAttributes annotation)
-			throws Exception {
+			throws DataSetException, IOException, SQLException {
 		List<IDataSet> datasets = new ArrayList<IDataSet>();
 		for (String dataSetLocation : annotation.getValue()) {
 			datasets.add(loadDataset(testContext, dataSetLocation, DataSetModifier.NONE));
@@ -198,13 +210,13 @@ public class DbUnitRunner {
 		return datasets;
 	}
 
-	private IDataSet getFullDatabaseDataSet(DbUnitTestContext testContext, String name) throws Exception {
+	private IDataSet getFullDatabaseDataSet(DbUnitTestContext testContext, String name) throws SQLException {
 		IDatabaseConnection connection = testContext.getConnections().get(name);
 		return connection.createDataSet();
 	}
 
 	private IDataSet loadDataset(DbUnitTestContext testContext, String dataSetLocation, DataSetModifier modifier)
-			throws Exception {
+			throws DataSetException, IOException {
 		DataSetLoader dataSetLoader = testContext.getDataSetLoader();
 		if (StringUtils.hasLength(dataSetLocation)) {
 			IDataSet dataSet = dataSetLoader.loadDataSet(testContext.getTestClass(), dataSetLocation);
@@ -216,7 +228,8 @@ public class DbUnitRunner {
 		return null;
 	}
 
-	private List<IColumnFilter> getColumnFilters(ExpectedDatabase annotation) throws Exception {
+	private List<IColumnFilter> getColumnFilters(ExpectedDatabase annotation)
+			throws InstantiationException, IllegalAccessException {
 		Class<? extends IColumnFilter>[] columnFilterClasses = annotation.columnFilters();
 		List<IColumnFilter> columnFilters = new LinkedList<IColumnFilter>();
 		for (Class<? extends IColumnFilter> columnFilterClass : columnFilterClasses) {
