@@ -83,11 +83,6 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.ppodgorsek</groupId>
-			<artifactId>spring-test-dbunit-core</artifactId>
-			<type>test-jar</type>
-		</dependency>
-		<dependency>
-			<groupId>com.github.ppodgorsek</groupId>
 			<artifactId>spring-test-dbunit-test</artifactId>
 		</dependency>
 

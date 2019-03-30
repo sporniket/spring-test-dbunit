@@ -18,10 +18,17 @@ package com.github.springtestdbunit.sample.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+
+import org.dbunit.dataset.datatype.IDataTypeFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.bean.DatabaseConfigBean;
+import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
 import com.github.springtestdbunit.test.config.TestConfiguration;
 
 /**
@@ -32,6 +39,31 @@ import com.github.springtestdbunit.test.config.TestConfiguration;
 @Configuration
 @Import({ TestConfiguration.class, SampleConfiguration.class })
 public class SampleTestConfiguration {
+
+	@Resource
+	private IDataTypeFactory dataTypeFactory;
+
+	@Resource
+	private DataSource dataSource;
+
+	@Bean
+	public DatabaseConfigBean databaseConfig() {
+
+		DatabaseConfigBean databaseConfig = new DatabaseConfigBean();
+		databaseConfig.setDatatypeFactory(dataTypeFactory);
+
+		return databaseConfig;
+	}
+
+	@Bean(DbUnitTestExecutionListener.DEFAULT_DBUNIT_DATABASE_CONNECTION_BEAN_NAME)
+	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory() {
+
+		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
+				dataSource);
+		databaseDataSourceConnectionFactory.setDatabaseConfig(databaseConfig());
+
+		return databaseDataSourceConnectionFactory;
+	}
 
 	@Bean
 	public List<String> hibernatePackagesToScan() {

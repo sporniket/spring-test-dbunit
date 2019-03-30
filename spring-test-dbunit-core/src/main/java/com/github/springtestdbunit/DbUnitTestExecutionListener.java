@@ -67,7 +67,11 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
 
 	private static final Log logger = LogFactory.getLog(DbUnitTestExecutionListener.class);
 
-	private static final String[] COMMON_DATABASE_CONNECTION_BEAN_NAMES = { "dbUnitDatabaseConnection", "dataSource" };
+	public static final String DEFAULT_DBUNIT_DATABASE_CONNECTION_BEAN_NAME = "dbUnitDatabaseConnection";
+	public static final String DEFAULT_DATASOURCE_BEAN_NAME = "dataSource";
+
+	private static final String[] COMMON_DATABASE_CONNECTION_BEAN_NAMES = {
+			DEFAULT_DBUNIT_DATABASE_CONNECTION_BEAN_NAME, DEFAULT_DATASOURCE_BEAN_NAME };
 
 	private static final String DATA_SET_LOADER_BEAN_NAME = "dbUnitDataSetLoader";
 
@@ -121,8 +125,9 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
 		if (logger.isDebugEnabled()) {
 			logger.debug("DBUnit tests will run using databaseConnection \""
 					+ StringUtils.arrayToCommaDelimitedString(databaseConnectionBeanNames)
-					+ "\", datasets will be loaded using " + (StringUtils.hasLength(dataSetLoaderBeanName)
-							? "'" + dataSetLoaderBeanName + "'" : dataSetLoaderClass));
+					+ "\", datasets will be loaded using "
+					+ (StringUtils.hasLength(dataSetLoaderBeanName) ? "'" + dataSetLoaderBeanName + "'"
+							: dataSetLoaderClass));
 		}
 		prepareDatabaseConnection(testContext, databaseConnectionBeanNames);
 		prepareDataSetLoader(testContext, dataSetLoaderBeanName, dataSetLoaderClass);
@@ -237,31 +242,31 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
 		}
 
 		public Class<?> getTestClass() {
-			return (Class<?>) ReflectionUtils.invokeMethod(GET_TEST_CLASS, this.testContext);
+			return (Class<?>) ReflectionUtils.invokeMethod(GET_TEST_CLASS, testContext);
 		}
 
 		public Method getTestMethod() {
-			return (Method) ReflectionUtils.invokeMethod(GET_TEST_METHOD, this.testContext);
+			return (Method) ReflectionUtils.invokeMethod(GET_TEST_METHOD, testContext);
 		}
 
 		public Object getTestInstance() {
-			return ReflectionUtils.invokeMethod(GET_TEST_INSTANCE, this.testContext);
+			return ReflectionUtils.invokeMethod(GET_TEST_INSTANCE, testContext);
 		}
 
 		public Throwable getTestException() {
-			return (Throwable) ReflectionUtils.invokeMethod(GET_TEST_EXCEPTION, this.testContext);
+			return (Throwable) ReflectionUtils.invokeMethod(GET_TEST_EXCEPTION, testContext);
 		}
 
 		public ApplicationContext getApplicationContext() {
-			return (ApplicationContext) ReflectionUtils.invokeMethod(GET_APPLICATION_CONTEXT, this.testContext);
+			return (ApplicationContext) ReflectionUtils.invokeMethod(GET_APPLICATION_CONTEXT, testContext);
 		}
 
 		public Object getAttribute(String name) {
-			return ReflectionUtils.invokeMethod(GET_ATTRIBUTE, this.testContext, name);
+			return ReflectionUtils.invokeMethod(GET_ATTRIBUTE, testContext, name);
 		}
 
 		public void setAttribute(String name, Object value) {
-			ReflectionUtils.invokeMethod(SET_ATTRIBUTE, this.testContext, name, value);
+			ReflectionUtils.invokeMethod(SET_ATTRIBUTE, testContext, name, value);
 		}
 
 	}
