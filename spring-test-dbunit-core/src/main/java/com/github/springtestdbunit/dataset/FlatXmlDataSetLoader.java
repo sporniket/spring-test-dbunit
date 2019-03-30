@@ -16,9 +16,11 @@
 
 package com.github.springtestdbunit.dataset;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSet;
 import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
@@ -32,13 +34,14 @@ import org.springframework.core.io.Resource;
 public class FlatXmlDataSetLoader extends AbstractDataSetLoader {
 
 	@Override
-	protected IDataSet createDataSet(Resource resource) throws Exception {
+	protected IDataSet createDataSet(Resource resource) throws DataSetException, IOException {
 		FlatXmlDataSetBuilder builder = new FlatXmlDataSetBuilder();
 		builder.setColumnSensing(true);
 		return buildDataSet(builder, resource);
 	}
 
-	private IDataSet buildDataSet(FlatXmlDataSetBuilder builder, Resource resource) throws Exception {
+	private IDataSet buildDataSet(FlatXmlDataSetBuilder builder, Resource resource)
+			throws DataSetException, IOException {
 		try {
 			// Prefer URL loading if possible so that DTDs can be resolved
 			return buildDataSetFromUrl(builder, resource.getURL());
@@ -47,11 +50,12 @@ public class FlatXmlDataSetLoader extends AbstractDataSetLoader {
 		}
 	}
 
-	private IDataSet buildDataSetFromUrl(FlatXmlDataSetBuilder builder, URL url) throws Exception {
+	private IDataSet buildDataSetFromUrl(FlatXmlDataSetBuilder builder, URL url) throws DataSetException {
 		return builder.build(url);
 	}
 
-	private IDataSet buildDataSetFromStream(FlatXmlDataSetBuilder builder, Resource resource) throws Exception {
+	private IDataSet buildDataSetFromStream(FlatXmlDataSetBuilder builder, Resource resource)
+			throws IOException, DataSetException {
 		InputStream inputStream = resource.getInputStream();
 		try {
 			return builder.build(inputStream);

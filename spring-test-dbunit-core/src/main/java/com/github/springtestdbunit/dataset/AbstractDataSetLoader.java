@@ -16,6 +16,9 @@
 
 package com.github.springtestdbunit.dataset;
 
+import java.io.IOException;
+
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.springframework.core.io.ClassRelativeResourceLoader;
 import org.springframework.core.io.Resource;
@@ -41,11 +44,13 @@ public abstract class AbstractDataSetLoader implements DataSetLoader {
 	 * {@link ResourceLoader} returned from {@link #getResourceLoader}.
 	 * <p>
 	 * If no resource can be found then <tt>null</tt> will be returned.
+	 * @throws DataSetException An exception thrown if the dataset itself has a problem.
+	 * @throws IOException An exception thrown if the dataset could not be loaded.
 	 *
 	 * @see #createDataSet(Resource)
 	 * @see com.github.springtestdbunit.dataset.DataSetLoader#loadDataSet(Class, String) java.lang.String)
 	 */
-	public IDataSet loadDataSet(Class<?> testClass, String location) throws Exception {
+	public IDataSet loadDataSet(Class<?> testClass, String location) throws DataSetException, IOException {
 		ResourceLoader resourceLoader = getResourceLoader(testClass);
 		String[] resourceLocations = getResourceLocations(testClass, location);
 		for (String resourceLocation : resourceLocations) {
@@ -81,8 +86,9 @@ public abstract class AbstractDataSetLoader implements DataSetLoader {
 	 * Factory method used to create the {@link IDataSet dataset}
 	 * @param resource an existing resource that contains the dataset data
 	 * @return a dataset
-	 * @throws Exception if the dataset could not be loaded
+	 * @throws DataSetException An exception thrown if the dataset itself has a problem.
+	 * @throws IOException An exception thrown if the dataset could not be loaded.
 	 */
-	protected abstract IDataSet createDataSet(Resource resource) throws Exception;
+	protected abstract IDataSet createDataSet(Resource resource) throws DataSetException, IOException;
 
 }

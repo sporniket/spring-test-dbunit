@@ -1,7 +1,9 @@
 package com.github.springtestdbunit.dataset;
 
+import java.io.IOException;
 import java.io.InputStream;
 
+import org.dbunit.dataset.DataSetException;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.xml.XmlDataSet;
 import org.springframework.core.io.Resource;
@@ -15,7 +17,7 @@ import org.springframework.core.io.Resource;
 public class XmlDataSetLoader extends AbstractDataSetLoader {
 
 	@Override
-	protected IDataSet createDataSet(Resource resource) throws Exception {
+	protected IDataSet createDataSet(Resource resource) throws IOException, DataSetException {
 		InputStream inputStream = resource.getInputStream();
 		try {
 			return new XmlDataSet(inputStream);
