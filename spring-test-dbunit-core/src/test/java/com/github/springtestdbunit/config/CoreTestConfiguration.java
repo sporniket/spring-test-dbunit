@@ -31,6 +31,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.jdbc.datasource.init.ScriptException;
 
+import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.bean.DatabaseConfigBean;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
 import com.github.springtestdbunit.entity.EntityAssert;
@@ -78,7 +79,7 @@ public class CoreTestConfiguration {
 		return databaseConfig;
 	}
 
-	@Bean
+	@Bean(DbUnitTestExecutionListener.DEFAULT_DBUNIT_DATABASE_CONNECTION_BEAN_NAME)
 	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory() {
 
 		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
@@ -88,7 +89,7 @@ public class CoreTestConfiguration {
 		return databaseDataSourceConnectionFactory;
 	}
 
-	@Bean
+	@Bean(DbUnitTestExecutionListener.DEFAULT_DBUNIT_DATABASE_CONNECTION_BEAN_NAME + "2")
 	public DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory2() {
 
 		DatabaseDataSourceConnectionFactoryBean databaseDataSourceConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(
@@ -98,7 +99,7 @@ public class CoreTestConfiguration {
 		return databaseDataSourceConnectionFactory;
 	}
 
-	@Bean(destroyMethod = "close")
+	@Bean(name = DbUnitTestExecutionListener.DEFAULT_DATASOURCE_BEAN_NAME + "2", destroyMethod = "close")
 	public DataSource dataSource2() {
 		return new HikariDataSource(hikariConfig2());
 	}
