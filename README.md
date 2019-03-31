@@ -2,8 +2,7 @@
 
 ## What is it?
 
-Spring DBUnit provides integration between the Spring testing framework and the popular DBUnit project. It allows
-to set up and tear down database tables using simple annotations as well as checking expected table contents once a test completes.
+Spring DBUnit provides integration between the Spring testing framework and the popular DBUnit project. It allows to set up and tear down database tables using simple annotations as well as checking expected table contents once a test completes.
 
 The project can be configured to run DBUnit tests using a Spring TestExecutionListener.
 
@@ -154,8 +153,7 @@ You then need to use the `@DbUnitConfiguration` on your test to link to the conn
 
 The `@DatabaseSetup`, `@DatabaseTearDown` and `@ExpectedDatabase` annotations all have a `connection` attribute which can be used if you need to target a specific connection. If you don't specify a `connection` the first `databaseConnection` from `@DbUnitConfiguration` will be used ("dataSource" in the example above).
 
-Spring Test DBUnit Annotations are repeatable so if you are using Java 8+ you can use several with the same test. For
-example:
+Spring Test DBUnit Annotations are repeatable so if you are using Java 8+ you can use several with the same test. For example:
 
     @Test
     @DatabaseSetup(value = "insert.xml")
@@ -204,7 +202,7 @@ If you need to load data from another source you will need to write your own Dat
 
 Unlike XML and XLS files, CSV files have a very basic structure which doesn't allow multiple tables to be defined in a single file.
 
-The CSV dataset loader therefore relies on a folder containing:
+The `CsvUrlDataSetLoader` therefore relies on a folder containing:
 
 * a `table-ordering.txt` file listing the tables in the order they should be imported,
 * a dedicated `<table name>.csv` file for each table which has to be imported.
@@ -212,6 +210,17 @@ The CSV dataset loader therefore relies on a folder containing:
 The dataset parameter should therefore point to that folder, not to individual files.
 
 Another point to keep in mind is that the current implementation of DBUnit uses commas as a value separator, not semicolons.
+
+### SQL Loader control datasets configuration
+
+Similarly to CSV files, SQL datasets can only contain one table per file.
+
+The `SqlLoaderControlDataSetLoader` therefore relies on a folder containing:
+
+* a `tables.lst` file listing the tables in the order they should be imported,
+* a dedicated `<table name>.ctl` file for each table which has to be imported.
+
+The dataset parameter should therefore point to that folder, not to individual files.
 
 ## Custom DBUnit Database Operations
 
