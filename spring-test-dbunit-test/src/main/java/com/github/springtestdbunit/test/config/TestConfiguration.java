@@ -23,6 +23,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.dbunit.dataset.datatype.IDataTypeFactory;
+import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -87,7 +88,7 @@ public class TestConfiguration {
 	@Bean
 	public IDataTypeFactory dataTypeFactory()
 			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		return (IDataTypeFactory) Class.forName(this.dbUnitDataTypeFactory).newInstance();
+		return (IDataTypeFactory) Class.forName(dbUnitDataTypeFactory).newInstance();
 	}
 
 	@Bean
@@ -98,17 +99,15 @@ public class TestConfiguration {
 		vendorAdapter.setShowSql(true);
 
 		Properties jpaProperties = new Properties();
-		jpaProperties.put("hibernate.dialect", this.hibernateDialect);
-		jpaProperties.put("hibernate.format_sql", this.hibernateFormatSql);
-		jpaProperties.put("hibernate.show_sql", this.hibernateShowSql);
-		jpaProperties.put("hibernate.hbm2ddl.auto", this.hibernateHbm2DdlAuto);
-		jpaProperties.put("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider");
-		jpaProperties.put("hibernate.id.new_generator_mappings", "true");
+		jpaProperties.put(AvailableSettings.DIALECT, hibernateDialect);
+		jpaProperties.put(AvailableSettings.FORMAT_SQL, hibernateFormatSql);
+		jpaProperties.put(AvailableSettings.SHOW_SQL, hibernateShowSql);
+		jpaProperties.put(AvailableSettings.HBM2DDL_AUTO, hibernateHbm2DdlAuto);
+		jpaProperties.put(AvailableSettings.USE_NEW_ID_GENERATOR_MAPPINGS, "true");
 
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
-		factory.setPackagesToScan(
-				this.hibernatePackagesToScan.toArray(new String[this.hibernatePackagesToScan.size()]));
+		factory.setPackagesToScan(hibernatePackagesToScan.toArray(new String[hibernatePackagesToScan.size()]));
 		factory.setDataSource(dataSource());
 		factory.setJpaProperties(jpaProperties);
 
@@ -121,11 +120,11 @@ public class TestConfiguration {
 	public HikariConfig hikariConfig() {
 
 		HikariConfig hikariConfig = new HikariConfig();
-		hikariConfig.setPoolName(this.dataSourcePoolName);
-		hikariConfig.setDriverClassName(this.dataSourceDriver);
-		hikariConfig.setJdbcUrl(this.dataSourceUrl);
-		hikariConfig.setUsername(this.dataSourceUsername);
-		hikariConfig.setPassword(this.dataSourcePassword);
+		hikariConfig.setPoolName(dataSourcePoolName);
+		hikariConfig.setDriverClassName(dataSourceDriver);
+		hikariConfig.setJdbcUrl(dataSourceUrl);
+		hikariConfig.setUsername(dataSourceUsername);
+		hikariConfig.setPassword(dataSourcePassword);
 		hikariConfig.setMaximumPoolSize(50);
 
 		return hikariConfig;
