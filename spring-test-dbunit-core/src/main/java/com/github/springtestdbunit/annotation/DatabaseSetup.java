@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors
+ * Copyright 2002-2019 the original author or authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.dbunit.dataset.IDataSet;
 import org.springframework.core.io.ClassRelativeResourceLoader;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
+import com.github.springtestdbunit.dataset.DataSetLoader;
 
 /**
  * Test annotation which indicates how to put a database into a know state before tests are run. This annotation can be
@@ -38,6 +40,7 @@ import com.github.springtestdbunit.DbUnitTestExecutionListener;
  * @see DbUnitTestExecutionListener
  *
  * @author Phillip Webb
+ * @author Paul Podgorsek
  */
 @Documented
 @Inherited
@@ -49,12 +52,38 @@ public @interface DatabaseSetup {
 	/**
 	 * The name of the connection that should be used. Can refer to a connection specified in
 	 * {@link DbUnitConfiguration @DbUnitConfiguration} or left blank to use the default connection.
+	 *
 	 * @return the connection
 	 */
 	String connection() default "";
 
 	/**
+	 * Returns the class that will be used to load {@link IDataSet} resources. The specified class must implement
+	 * {@link DataSetLoader} and must have a default constructor. If not provided, the one defined on the
+	 * {@link DbUnitConfiguration} will be used instead.
+	 *
+	 * Leave blank to use the default dataset loader. If both the {@code dataSetLoader} and {@code dataSetLoaderBean}
+	 * are defined, the latter will be used.
+	 *
+	 * @return The data set loader class.
+	 */
+	Class<? extends DataSetLoader> dataSetLoader() default DataSetLoader.class;
+
+	/**
+	 * Returns the name of the bean that will be used to load {@link IDataSet} resources. The specified bean must
+	 * implement {@link DataSetLoader}. If not provided, the one defined on the {@link DbUnitConfiguration} will be used
+	 * instead.
+	 *
+	 * Leave blank to use the default dataset loader. If both the {@code dataSetLoader} and {@code dataSetLoaderBean}
+	 * are defined, the latter will be used.
+	 *
+	 * @return The data set loader bean name.
+	 */
+	String dataSetLoaderBean() default "";
+
+	/**
 	 * Determines the type of {@link DatabaseOperation operation} that will be used to reset the database.
+	 *
 	 * @return The type of operation used to reset the database
 	 */
 	DatabaseOperation type() default DatabaseOperation.CLEAN_INSERT;
@@ -63,6 +92,7 @@ public @interface DatabaseSetup {
 	 * Provides the locations of the datasets that will be used to reset the database. Unless otherwise
 	 * {@link DbUnitConfiguration#dataSetLoader() configured} locations are {@link ClassRelativeResourceLoader relative}
 	 * to the class under test.
+	 *
 	 * @return The dataset locations
 	 * @see DbUnitConfiguration#dataSetLoader()
 	 */
