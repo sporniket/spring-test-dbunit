@@ -69,7 +69,7 @@ public @interface DbUnitConfiguration {
 	String dataSetLoaderBean() default "";
 
 	/**
-	 * Returns the class that will be used to lookup DBUnit databse operations. The specific class must implement
+	 * Returns the class that will be used to lookup DBUnit database operations. The specific class must implement
 	 * {@link DatabaseOperationLookup} and must have a default constructor.
 	 * @return the database operation lookup
 	 */
