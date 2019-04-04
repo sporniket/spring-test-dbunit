@@ -222,6 +222,14 @@ The `SqlLoaderControlDataSetLoader` therefore relies on a folder containing:
 
 The dataset parameter should therefore point to that folder, not to individual files.
 
+### Overriding the dataset loader
+
+Although the dataset loader is usually defined on the `DbUnitConfiguration` annotation, it is possible to override it on the following annotations:
+
+* `DatabaseSetup`
+* `DatabaseTearDown`
+* `ExpectedDatabase`
+
 ## Custom DBUnit Database Operations
 
 In some situations you may need to use custom DBUnit DatabaseOperation classes. For example, DBUnit includes `org.dbunit.ext.mssql.InsertIdentityOperation` for use with Microsoft SQL Server. The `DatabaseOperationLookup` interface can be used to create your own lookup strategy if you need support custom operations. A `MicrosoftSqlDatabaseOperationLookup` class is provided to support the aforementioned MSSQL operations.
