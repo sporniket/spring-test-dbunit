@@ -68,7 +68,7 @@ public class DbUnitTestContextAdapter implements DbUnitTestContext {
 		return (DataSetLoader) getAttribute(DbUnitTestContextConstants.DATA_SET_LOADER_ATTRIBUTE);
 	}
 
-	public DatabaseOperationLookup getDatbaseOperationLookup() {
+	public DatabaseOperationLookup getDatabaseOperationLookup() {
 		return (DatabaseOperationLookup) getAttribute(DbUnitTestContextConstants.DATABASE_OPERATION_LOOKUP_ATTRIBUTE);
 	}
 

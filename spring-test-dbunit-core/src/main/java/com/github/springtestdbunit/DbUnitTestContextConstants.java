@@ -31,7 +31,7 @@ public final class DbUnitTestContextConstants {
 			.getQualifiedAttributeName(DbUnitTestExecutionListener.class, "dataSetLoader");
 
 	public static final String DATABASE_OPERATION_LOOKUP_ATTRIBUTE = Conventions
-			.getQualifiedAttributeName(DbUnitTestExecutionListener.class, "databseOperationLookup");
+			.getQualifiedAttributeName(DbUnitTestExecutionListener.class, "databaseOperationLookup");
 
 	/**
 	 * Default private constructor to avoid instantiating this class.
