@@ -29,6 +29,8 @@ import org.springframework.context.annotation.Import;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.bean.DatabaseConfigBean;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean;
+import com.github.springtestdbunit.dataset.CsvUrlDataSetLoader;
+import com.github.springtestdbunit.dataset.XlsDataSetLoader;
 import com.github.springtestdbunit.test.config.TestConfiguration;
 
 /**
@@ -72,6 +74,16 @@ public class SampleTestConfiguration {
 		hibernatePackagesToScan.add("com.github.springtestdbunit.sample.entity");
 
 		return hibernatePackagesToScan;
+	}
+
+	@Bean
+	public CsvUrlDataSetLoader csvDataSetLoader() {
+		return new CsvUrlDataSetLoader();
+	}
+
+	@Bean
+	public XlsDataSetLoader xlsDataSetLoader() {
+		return new XlsDataSetLoader();
 	}
 
 }
