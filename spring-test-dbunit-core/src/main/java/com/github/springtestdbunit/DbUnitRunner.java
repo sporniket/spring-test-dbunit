@@ -59,6 +59,7 @@ import com.github.springtestdbunit.util.DataSetAnnotationUtils;
  * @author Mario Zagar
  * @author Sunitha Rajarathnam
  * @author Oleksii Lomako
+ * @author Paul Podgorsek
  */
 public class DbUnitRunner {
 
@@ -110,7 +111,15 @@ public class DbUnitRunner {
 				}
 			}
 		} finally {
-			testContext.getConnections().closeAll();
+			DatabaseConnections connections = testContext.getConnections();
+
+			if (connections == null) {
+				if (logger.isWarnEnabled()) {
+					logger.warn("No database connections found in the test context, please check the test setup");
+				}
+			} else {
+				connections.closeAll();
+			}
 		}
 	}
 
