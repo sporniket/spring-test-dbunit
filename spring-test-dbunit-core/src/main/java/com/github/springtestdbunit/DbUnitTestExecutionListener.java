@@ -44,10 +44,10 @@ import com.github.springtestdbunit.operation.DefaultDatabaseOperationLookup;
  * <code>TestExecutionListener</code> which provides support for {@link DatabaseSetup &#064;DatabaseSetup},
  * {@link DatabaseTearDown &#064;DatabaseTearDown} and {@link ExpectedDatabase &#064;ExpectedDatabase} annotations.
  * <p>
- * A bean named "<tt>dbUnitDatabaseConnection</tt>" or "<tt>dataSource</tt>" is expected in the
- * <tt>ApplicationContext</tt> associated with the test. This bean can contain either a {@link IDatabaseConnection} or a
- * {@link DataSource} . A custom bean name can also be specified using the
- * {@link DbUnitConfiguration#databaseConnection() &#064;DbUnitConfiguration} annotation.
+ * A bean named "{@code dbUnitDatabaseConnection}" or "{@code dataSource}" is expected in the {@code ApplicationContext}
+ * associated with the test. This bean can contain either a {@link IDatabaseConnection} or a {@link DataSource} . A
+ * custom bean name can also be specified using the {@link DbUnitConfiguration#databaseConnection()
+ * &#064;DbUnitConfiguration} annotation.
  * <p>
  * Datasets are loaded using the {@link FlatXmlDataSetLoader} and DBUnit database operation lookups are performed using
  * the {@link DefaultDatabaseOperationLookup} unless otherwise {@link DbUnitConfiguration#dataSetLoader() configured}.
@@ -134,7 +134,9 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
 
 	private void prepareDatabaseConnection(DbUnitTestContextAdapter testContext, String[] connectionBeanNames)
 			throws Exception {
+
 		IDatabaseConnection[] connections = new IDatabaseConnection[connectionBeanNames.length];
+
 		for (int i = 0; i < connectionBeanNames.length; i++) {
 			Object databaseConnection = testContext.getApplicationContext().getBean(connectionBeanNames[i]);
 			if (databaseConnection instanceof DataSource) {

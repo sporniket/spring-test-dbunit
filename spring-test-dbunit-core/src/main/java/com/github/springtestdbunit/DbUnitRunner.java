@@ -92,33 +92,21 @@ public class DbUnitRunner {
 	 */
 	public void afterTestMethod(DbUnitTestContext testContext)
 			throws SQLException, IOException, DatabaseUnitException, InstantiationException, IllegalAccessException {
-		try {
-			try {
-				verifyExpected(testContext,
-						Annotations.get(testContext, ExpectedDatabases.class, ExpectedDatabase.class));
-			} finally {
-				Annotations<DatabaseTearDown> annotations = Annotations.get(testContext, DatabaseTearDowns.class,
-						DatabaseTearDown.class);
-				try {
-					setupOrTeardown(testContext, false, DatabaseSetupTearDownAnnotationAttributes.get(annotations));
-				} catch (RuntimeException ex) {
-					if (testContext.getTestException() == null) {
-						throw ex;
-					}
-					if (logger.isWarnEnabled()) {
-						logger.warn("Unable to throw database cleanup exception due to existing test error", ex);
-					}
-				}
-			}
-		} finally {
-			DatabaseConnections connections = testContext.getConnections();
 
-			if (connections == null) {
-				if (logger.isWarnEnabled()) {
-					logger.warn("No database connections found in the test context, please check the test setup");
+		try {
+			verifyExpected(testContext, Annotations.get(testContext, ExpectedDatabases.class, ExpectedDatabase.class));
+		} finally {
+			Annotations<DatabaseTearDown> annotations = Annotations.get(testContext, DatabaseTearDowns.class,
+					DatabaseTearDown.class);
+			try {
+				setupOrTeardown(testContext, false, DatabaseSetupTearDownAnnotationAttributes.get(annotations));
+			} catch (RuntimeException ex) {
+				if (testContext.getTestException() == null) {
+					throw ex;
 				}
-			} else {
-				connections.closeAll();
+				if (logger.isWarnEnabled()) {
+					logger.warn("Unable to throw database cleanup exception due to existing test error", ex);
+				}
 			}
 		}
 	}
