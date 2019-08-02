@@ -56,17 +56,20 @@ public class DatabaseDataSourceConnectionFactoryBean implements FactoryBean<Data
 	}
 
 	public DatabaseDataSourceConnection getObject() throws Exception {
-		Assert.notNull(this.dataSource, "The dataSource is required");
+
+		Assert.notNull(dataSource, "The dataSource is required");
 		DatabaseDataSourceConnection dataSourceConnection = new DatabaseDataSourceConnection(
-				makeTransactionAware(this.dataSource), this.schema, this.username, this.password);
-		if (this.databaseConfig != null) {
-			this.databaseConfig.apply(dataSourceConnection.getConfig());
+				makeTransactionAware(dataSource), schema, username, password);
+
+		if (databaseConfig != null) {
+			databaseConfig.apply(dataSourceConnection.getConfig());
 		}
+
 		return dataSourceConnection;
 	}
 
 	private DataSource makeTransactionAware(DataSource dataSource) {
-		if ((dataSource instanceof TransactionAwareDataSourceProxy) || !this.transactionAware) {
+		if ((dataSource instanceof TransactionAwareDataSourceProxy) || !transactionAware) {
 			return dataSource;
 		}
 		return new TransactionAwareDataSourceProxy(dataSource);
@@ -92,7 +95,7 @@ public class DatabaseDataSourceConnectionFactoryBean implements FactoryBean<Data
 
 	/**
 	 * Set the user name to use when accessing the data source.
-	 * @param username the user name or <tt>null</tt>
+	 * @param username the user name or {@code null}
 	 */
 	public void setUsername(String username) {
 		this.username = username;
@@ -100,7 +103,7 @@ public class DatabaseDataSourceConnectionFactoryBean implements FactoryBean<Data
 
 	/**
 	 * Set the password to use when accessing the data source.
-	 * @param password the password or <tt>null</tt>
+	 * @param password the password or {@code null}
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -108,7 +111,7 @@ public class DatabaseDataSourceConnectionFactoryBean implements FactoryBean<Data
 
 	/**
 	 * Set the schema to use when accessing the data source.
-	 * @param schema the schema or <tt>null</tt>
+	 * @param schema the schema or {@code null}
 	 */
 	public void setSchema(String schema) {
 		this.schema = schema;
@@ -118,7 +121,7 @@ public class DatabaseDataSourceConnectionFactoryBean implements FactoryBean<Data
 	 * Set an optional {@link DatabaseConfigBean configuration} that will be applied to the newly created
 	 * {@link DatabaseDataSourceConnection}
 	 *
-	 * @param databaseConfig the database configuration or <tt>null</tt> if no additional configuration is required.
+	 * @param databaseConfig the database configuration or {@code null} if no additional configuration is required.
 	 */
 	public void setDatabaseConfig(DatabaseConfigBean databaseConfig) {
 		this.databaseConfig = databaseConfig;
@@ -126,7 +129,7 @@ public class DatabaseDataSourceConnectionFactoryBean implements FactoryBean<Data
 
 	/**
 	 * Determines if the {@link IDatabaseConnection} created by this bean should be aware of Spring
-	 * {@link PlatformTransactionManager}s. Defaults to <tt>true</tt>
+	 * {@link PlatformTransactionManager}s. Defaults to {@code true}
 	 * @param transactionAware If the connection should be transaction aware
 	 */
 	public void setTransactionAware(boolean transactionAware) {

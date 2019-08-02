@@ -24,7 +24,7 @@ import org.dbunit.dataset.IDataSet;
 /**
  * Strategy interface for {@link #loadDataSet loading} a {@link IDataSet dataset}.
  * <p>
- * Concrete implementations must provide a <code>public</code> no-args constructor.
+ * Concrete implementations must provide a {@code public} no-args constructor.
  *
  * @author Phillip Webb
  *
@@ -33,14 +33,14 @@ import org.dbunit.dataset.IDataSet;
 public interface DataSetLoader {
 
 	/**
-	 * Load and return {@link IDataSet dataset} from the specified. If the dataset cannot be found <tt>null</tt> may be
+	 * Load and return {@link IDataSet dataset} from the specified. If the dataset cannot be found {@code null} may be
 	 * returned.
 	 * @param testClass The class under test
 	 * @param location The location to load
-	 * @return a {@link IDataSet dataset} or <tt>null</tt>
+	 * @return a {@link IDataSet dataset} or {@code null}
 	 * @throws DataSetException An exception thrown if the dataset itself has a problem.
 	 * @throws IOException An exception thrown if the dataset could not be loaded.
 	 */
-	public IDataSet loadDataSet(Class<?> testClass, String location) throws DataSetException, IOException;
+	IDataSet loadDataSet(Class<?> testClass, String location) throws DataSetException, IOException;
 
 }

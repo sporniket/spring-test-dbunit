@@ -59,6 +59,7 @@ import com.github.springtestdbunit.util.DataSetAnnotationUtils;
  * @author Mario Zagar
  * @author Sunitha Rajarathnam
  * @author Oleksii Lomako
+ * @author Paul Podgorsek
  */
 public class DbUnitRunner {
 
@@ -91,26 +92,24 @@ public class DbUnitRunner {
 	 */
 	public void afterTestMethod(DbUnitTestContext testContext)
 			throws SQLException, IOException, DatabaseUnitException, InstantiationException, IllegalAccessException {
+
 		try {
-			try {
-				verifyExpected(testContext,
-						Annotations.get(testContext, ExpectedDatabases.class, ExpectedDatabase.class));
-			} finally {
-				Annotations<DatabaseTearDown> annotations = Annotations.get(testContext, DatabaseTearDowns.class,
-						DatabaseTearDown.class);
-				try {
-					setupOrTeardown(testContext, false, DatabaseSetupTearDownAnnotationAttributes.get(annotations));
-				} catch (RuntimeException ex) {
-					if (testContext.getTestException() == null) {
-						throw ex;
-					}
-					if (logger.isWarnEnabled()) {
-						logger.warn("Unable to throw database cleanup exception due to existing test error", ex);
-					}
-				}
-			}
+			verifyExpected(testContext, Annotations.get(testContext, ExpectedDatabases.class, ExpectedDatabase.class));
 		} finally {
-			testContext.getConnections().closeAll();
+			Annotations<DatabaseTearDown> annotations = Annotations.get(testContext, DatabaseTearDowns.class,
+					DatabaseTearDown.class);
+			try {
+				setupOrTeardown(testContext, false, DatabaseSetupTearDownAnnotationAttributes.get(annotations));
+			} catch (RuntimeException ex) {
+				if (testContext.getTestException() == null) {
+					throw ex;
+				}
+				if (logger.isWarnEnabled()) {
+					logger.warn("Unable to throw database cleanup exception due to existing test error", ex);
+				}
+			} finally {
+				testContext.getConnections().closeAll();
+			}
 		}
 	}
 
