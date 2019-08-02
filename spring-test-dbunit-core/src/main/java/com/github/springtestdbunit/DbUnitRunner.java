@@ -107,6 +107,8 @@ public class DbUnitRunner {
 				if (logger.isWarnEnabled()) {
 					logger.warn("Unable to throw database cleanup exception due to existing test error", ex);
 				}
+			} finally {
+				testContext.getConnections().closeAll();
 			}
 		}
 	}
