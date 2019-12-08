@@ -134,7 +134,7 @@ public class DbUnitTestExecutionListenerPrepareTest {
 
 	@Test
 	public void shouldFailIfDatabaseConnectionOfWrongTypeIsFound() throws Exception {
-		addBean("dbUnitDatabaseConnection", new Integer(0));
+		addBean("dbUnitDatabaseConnection", Integer.valueOf(0));
 		ExtendedTestContextManager testContextManager = new ExtendedTestContextManager(NoDbUnitConfiguration.class);
 		try {
 			testContextManager.prepareTestInstance();

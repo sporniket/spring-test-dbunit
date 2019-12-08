@@ -110,12 +110,12 @@ public class DatabaseConfigBeanTest {
 
 	@Test
 	public void testBatchSize() {
-		doTest("batchSize", DatabaseConfig.PROPERTY_BATCH_SIZE, new Integer(123));
+		doTest("batchSize", DatabaseConfig.PROPERTY_BATCH_SIZE, Integer.valueOf(123));
 	}
 
 	@Test
 	public void testFetchSize() {
-		doTest("fetchSize", DatabaseConfig.PROPERTY_FETCH_SIZE, new Integer(123));
+		doTest("fetchSize", DatabaseConfig.PROPERTY_FETCH_SIZE, Integer.valueOf(123));
 	}
 
 	@Test
