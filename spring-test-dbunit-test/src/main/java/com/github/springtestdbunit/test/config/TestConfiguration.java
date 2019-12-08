@@ -15,6 +15,7 @@
  */
 package com.github.springtestdbunit.test.config;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Properties;
 
@@ -87,8 +88,9 @@ public class TestConfiguration {
 
 	@Bean
 	public IDataTypeFactory dataTypeFactory()
-			throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-		return (IDataTypeFactory) Class.forName(dbUnitDataTypeFactory).newInstance();
+			throws InstantiationException, IllegalAccessException, ClassNotFoundException, IllegalArgumentException,
+			InvocationTargetException, NoSuchMethodException, SecurityException {
+		return (IDataTypeFactory) Class.forName(dbUnitDataTypeFactory).getDeclaredConstructor().newInstance();
 	}
 
 	@Bean

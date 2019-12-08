@@ -61,7 +61,7 @@ public class DataSetAnnotationUtils {
 				if ((annotationAttributes.getDataSetLoader() != null)
 						&& (annotationAttributes.getDataSetLoader() != DataSetLoader.class)) {
 					try {
-						return annotationAttributes.getDataSetLoader().newInstance();
+						return annotationAttributes.getDataSetLoader().getDeclaredConstructor().newInstance();
 					} catch (Exception ex) {
 						LOGGER.warn(
 								"Unable to create data set loader instance for "
