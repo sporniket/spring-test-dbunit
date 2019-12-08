@@ -17,6 +17,7 @@
 package com.github.springtestdbunit;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,15 +90,21 @@ public class DbUnitRunner {
 	 * @throws IOException An exception thrown if a dataset could not be loaded.
 	 * @throws IllegalAccessException If a database column filter could not be initialised.
 	 * @throws InstantiationException If a database column filter could not be initialised.
+	 * @throws SecurityException If a database column filter could not be initialised.
+	 * @throws NoSuchMethodException If a database column filter could not be initialised.
+	 * @throws InvocationTargetException If a database column filter could not be initialised.
+	 * @throws IllegalArgumentException If a database column filter could not be initialised.
 	 */
 	public void afterTestMethod(DbUnitTestContext testContext)
-			throws SQLException, IOException, DatabaseUnitException, InstantiationException, IllegalAccessException {
+			throws SQLException, IOException, DatabaseUnitException, InstantiationException, IllegalAccessException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		try {
 			verifyExpected(testContext, Annotations.get(testContext, ExpectedDatabases.class, ExpectedDatabase.class));
 		} finally {
 			Annotations<DatabaseTearDown> annotations = Annotations.get(testContext, DatabaseTearDowns.class,
 					DatabaseTearDown.class);
+
 			try {
 				setupOrTeardown(testContext, false, DatabaseSetupTearDownAnnotationAttributes.get(annotations));
 			} catch (RuntimeException ex) {
@@ -115,7 +122,9 @@ public class DbUnitRunner {
 
 	private void verifyExpected(DbUnitTestContext testContext, Annotations<ExpectedDatabase> annotations)
 			throws DataSetException, SQLException, DatabaseUnitException, InstantiationException,
-			IllegalAccessException, IOException {
+			IllegalAccessException, IOException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException {
+
 		if (testContext.getTestException() != null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Skipping @DatabaseTest expectation due to test exception "
@@ -123,13 +132,16 @@ public class DbUnitRunner {
 			}
 			return;
 		}
+
 		DatabaseConnections connections = testContext.getConnections();
 		DataSetModifier modifier = getModifier(testContext, annotations);
 		boolean override = false;
+
 		for (ExpectedDatabase annotation : annotations.getMethodAnnotations()) {
 			verifyExpected(testContext, connections, modifier, annotation);
 			override |= annotation.override();
 		}
+
 		if (!override) {
 			for (ExpectedDatabase annotation : annotations.getClassAnnotations()) {
 				verifyExpected(testContext, connections, modifier, annotation);
@@ -139,19 +151,23 @@ public class DbUnitRunner {
 
 	private void verifyExpected(DbUnitTestContext testContext, DatabaseConnections connections,
 			DataSetModifier modifier, ExpectedDatabase annotation) throws DataSetException, SQLException,
-			DatabaseUnitException, InstantiationException, IllegalAccessException, IOException {
+			DatabaseUnitException, InstantiationException, IllegalAccessException, IOException,
+			IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 
 		String query = annotation.query();
 		String table = annotation.table();
 		IDataSet expectedDataSet = loadDataset(testContext, new ExpectedDatabaseAnnotationAttributes(annotation),
 				annotation.value(), modifier);
 		IDatabaseConnection connection = connections.get(annotation.connection());
+
 		if (expectedDataSet != null) {
 			if (logger.isDebugEnabled()) {
 				logger.debug("Veriftying @DatabaseTest expectation using " + annotation.value());
 			}
+
 			DatabaseAssertion assertion = annotation.assertionMode().getDatabaseAssertion();
 			List<IColumnFilter> columnFilters = getColumnFilters(annotation);
+
 			if (StringUtils.hasLength(query)) {
 				Assert.hasLength(table, "The table name must be specified when using a SQL query");
 				ITable expectedTable = expectedDataSet.getTable(table);
@@ -252,12 +268,16 @@ public class DbUnitRunner {
 	}
 
 	private List<IColumnFilter> getColumnFilters(ExpectedDatabase annotation)
-			throws InstantiationException, IllegalAccessException {
+			throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException,
+			NoSuchMethodException, SecurityException {
+
 		Class<? extends IColumnFilter>[] columnFilterClasses = annotation.columnFilters();
 		List<IColumnFilter> columnFilters = new LinkedList<IColumnFilter>();
+
 		for (Class<? extends IColumnFilter> columnFilterClass : columnFilterClasses) {
-			columnFilters.add(columnFilterClass.newInstance());
+			columnFilters.add(columnFilterClass.getDeclaredConstructor().newInstance());
 		}
+
 		return columnFilters;
 	}
 

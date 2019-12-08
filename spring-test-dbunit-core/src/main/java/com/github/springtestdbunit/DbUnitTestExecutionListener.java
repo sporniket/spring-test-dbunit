@@ -158,7 +158,7 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
 		} else {
 			try {
 				testContext.setAttribute(DbUnitTestContextConstants.DATA_SET_LOADER_ATTRIBUTE,
-						dataSetLoaderClass.newInstance());
+						dataSetLoaderClass.getDeclaredConstructor().newInstance());
 			} catch (Exception ex) {
 				throw new IllegalArgumentException(
 						"Unable to create data set loader instance for " + dataSetLoaderClass, ex);
@@ -170,7 +170,7 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
 			Class<? extends DatabaseOperationLookup> databaseOperationLookupClass) {
 		try {
 			testContext.setAttribute(DbUnitTestContextConstants.DATABASE_OPERATION_LOOKUP_ATTRIBUTE,
-					databaseOperationLookupClass.newInstance());
+					databaseOperationLookupClass.getDeclaredConstructor().newInstance());
 		} catch (Exception ex) {
 			throw new IllegalArgumentException(
 					"Unable to create database operation lookup instance for " + databaseOperationLookupClass, ex);

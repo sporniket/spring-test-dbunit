@@ -43,9 +43,9 @@ public abstract class TestExecutionListenerChain implements TestExecutionListene
 	private List<TestExecutionListener> reverseChain;
 
 	public TestExecutionListenerChain() {
-		this.chain = createChain();
-		this.reverseChain = new ArrayList<TestExecutionListener>(this.chain);
-		Collections.reverse(this.reverseChain);
+		chain = createChain();
+		reverseChain = new ArrayList<TestExecutionListener>(chain);
+		Collections.reverse(reverseChain);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public abstract class TestExecutionListenerChain implements TestExecutionListene
 		try {
 			List<TestExecutionListener> chain = new ArrayList<TestExecutionListener>(chainClasses.length);
 			for (int i = 0; i < chainClasses.length; i++) {
-				chain.add((TestExecutionListener) chainClasses[i].newInstance());
+				chain.add((TestExecutionListener) chainClasses[i].getDeclaredConstructor().newInstance());
 			}
 			return chain;
 		} catch (Exception ex) {
@@ -113,11 +113,11 @@ public abstract class TestExecutionListenerChain implements TestExecutionListene
 	}
 
 	private void forwards(Call call) throws Exception {
-		runChain(this.chain.iterator(), call);
+		runChain(chain.iterator(), call);
 	}
 
 	private void backwards(Call call) throws Exception {
-		runChain(this.reverseChain.iterator(), call);
+		runChain(reverseChain.iterator(), call);
 	}
 
 	private void runChain(Iterator<TestExecutionListener> iterator, Call call) throws Exception {
