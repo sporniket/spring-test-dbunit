@@ -31,6 +31,7 @@ import com.github.springtestdbunit.annotation.DbUnitConfiguration ;
 import com.github.springtestdbunit.annotation.ExpectedDatabase ;
 import com.github.springtestdbunit.bean.DatabaseDataSourceConnectionFactoryBean ;
 import com.github.springtestdbunit.bean.DbUnitRunnerConfigBean ;
+import com.github.springtestdbunit.dataset.AcceptColumSensingEnabling ;
 import com.github.springtestdbunit.dataset.DataSetLoader ;
 import com.github.springtestdbunit.dataset.FlatXmlDataSetLoader ;
 import com.github.springtestdbunit.operation.DatabaseOperationLookup ;
@@ -112,10 +113,10 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
             logger.debug("DBUnit tests will run using databaseConnection \"" + StringUtils.arrayToCommaDelimitedString(databaseConnectionBeanNames)
                     + "\", datasets will be loaded using " + (StringUtils.hasLength(dataSetLoaderBeanName) ? "'" + dataSetLoaderBeanName + "'" : dataSetLoaderClass)) ;
         }
-        prepareDatabaseConnection(testContext, databaseConnectionBeanNames) ;
-        prepareDataSetLoader(testContext, dataSetLoaderBeanName, dataSetLoaderClass) ;
-        prepareDatabaseOperationLookup(testContext, databaseOperationLookupClass) ;
         attachRunnerConfiguration(testContext, dbUnitRunnerConfigBeanName) ;
+        prepareDatabaseConnection(testContext, databaseConnectionBeanNames) ;
+        prepareDataSetLoader(testContext, dataSetLoaderBeanName, dataSetLoaderClass, runner.getDefaultConfigBean().isEnabledColumnSense()) ;
+        prepareDatabaseOperationLookup(testContext, databaseOperationLookupClass) ;
     }
 
     private void attachRunnerConfiguration(DbUnitTestContextAdapter testContext, String dbUnitRunnerConfigBeanName) {
@@ -151,15 +152,21 @@ public class DbUnitTestExecutionListener extends AbstractTestExecutionListener {
         testContext.setAttribute(DbUnitTestContextConstants.CONNECTION_ATTRIBUTE, new DatabaseConnections(connectionBeanNames, connections)) ;
     }
 
-    private void prepareDataSetLoader(DbUnitTestContextAdapter testContext, String beanName, Class<? extends DataSetLoader> dataSetLoaderClass) {
+    private void prepareDataSetLoader(DbUnitTestContextAdapter testContext, String beanName, Class<? extends DataSetLoader> dataSetLoaderClass, boolean isColumnSenseEnabled) {
+        DataSetLoader loader = null ;
         if (StringUtils.hasLength(beanName)) {
-            testContext.setAttribute(DbUnitTestContextConstants.DATA_SET_LOADER_ATTRIBUTE, testContext.getApplicationContext().getBean(beanName, DataSetLoader.class)) ;
+            loader = testContext.getApplicationContext().getBean(beanName, DataSetLoader.class) ;
+            testContext.setAttribute(DbUnitTestContextConstants.DATA_SET_LOADER_ATTRIBUTE, loader) ;
         } else {
             try {
-                testContext.setAttribute(DbUnitTestContextConstants.DATA_SET_LOADER_ATTRIBUTE, dataSetLoaderClass.getDeclaredConstructor().newInstance()) ;
+                loader = dataSetLoaderClass.getDeclaredConstructor().newInstance() ;
+                testContext.setAttribute(DbUnitTestContextConstants.DATA_SET_LOADER_ATTRIBUTE, loader) ;
             } catch (final Exception ex) {
                 throw new IllegalArgumentException("Unable to create data set loader instance for " + dataSetLoaderClass, ex) ;
             }
+        }
+        if ((null != loader) && (loader instanceof AcceptColumSensingEnabling)) {
+            ((AcceptColumSensingEnabling) loader).setColumnSensingEnabled(isColumnSenseEnabled) ;
         }
     }
 
