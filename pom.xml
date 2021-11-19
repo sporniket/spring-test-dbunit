@@ -5,7 +5,7 @@
 
 	<groupId>com.sporniket.spring-test-dbunit</groupId>
 	<artifactId>spring-test-dbunit-parent</artifactId>
-	<version>5.2.1</version>
+	<version>5.2.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Spring Test DBUnit Parent</name>
@@ -60,7 +60,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/sporniket/spring-test-dbunit.git</connection>
 		<url>https://github.com/sporniket/spring-test-dbunit</url>
-		<tag>v5.2.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
