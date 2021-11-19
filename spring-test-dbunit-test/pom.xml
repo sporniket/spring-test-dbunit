@@ -6,45 +6,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.github.ppodgorsek</groupId>
+		<groupId>com.sporniket.spring-test-dbunit</groupId>
 		<artifactId>spring-test-dbunit-parent</artifactId>
 		<version>5.2.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.github.ppodgorsek</groupId>
+	<groupId>com.sporniket.spring-test-dbunit</groupId>
 	<artifactId>spring-test-dbunit-test</artifactId>
 	<packaging>jar</packaging>
 
 	<name>Spring Test DBUnit Test</name>
 	<description>Test module for the integration between the Spring testing framework and DBUnit</description>
-	<url>https://github.com/ppodgorsek/spring-test-dbunit</url>
-
-	<licenses>
-		<license>
-			<name>Apache 2</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-
-	<developers>
-		<developer>
-			<name>Paul Podgorsek</name>
-			<email>ppodgorsek@users.noreply.github.com</email>
-			<url>https://github.com/ppodgorsek</url>
-		</developer>
-	</developers>
-
-	<scm>
-		<url>https://github.com/ppodgorsek/spring-test-dbunit</url>
-		<connection>scm:git:git://github.com/ppodgorsek/spring-test-dbunit.git</connection>
-		<developerConnection>scm:git:git@github.com:ppodgorsek/spring-test-dbunit.git</developerConnection>
-	</scm>
-
-	<issueManagement>
-		<system>GitHub Issues</system>
-		<url>https://github.com/ppodgorsek/spring-test-dbunit/issues</url>
-	</issueManagement>
+	<url>https://github.com/sporniket/spring-test-dbunit</url>
 
 	<properties>
 		<config.path.prefix>..</config.path.prefix>

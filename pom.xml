@@ -5,20 +5,14 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.sonatype.oss</groupId>
-		<artifactId>oss-parent</artifactId>
-		<version>9</version>
-		<relativePath />
-	</parent>
-
-	<groupId>com.github.ppodgorsek</groupId>
+	<groupId>com.sporniket.spring-test-dbunit</groupId>
 	<artifactId>spring-test-dbunit-parent</artifactId>
 	<version>5.2.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Spring Test DBUnit Parent</name>
 	<description>This project was forked from https://github.com/springtestdbunit/spring-test-dbunit due to the lack of maintenance of the latter.</description>
+	<url>https://github.com/sporniket/spring-test-dbunit/blob/master/${project.artifactId}</url>
 
 	<licenses>
 		<license>
@@ -28,7 +22,28 @@
 		</license>
 	</licenses>
 
+	<organization>
+		<name>Sporniket-Studio.com</name>
+		<url>http://Sporniket-Studio.com</url>
+	</organization>
+
 	<developers>
+		<developer>
+			<id>sporniket</id>
+			<name>David SPORN</name>
+			<email>david.sporn@sporniket.com</email>
+			<url>http://sporniket.com</url>
+			<organization>Sporniket-Studio.com</organization>
+			<organizationUrl>http://Sporniket-Studio.com</organizationUrl>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>+1</timezone>
+			<properties>
+				<picUrl>http://avatar.sporniket.com/normal</picUrl>
+			</properties>
+		</developer>
 		<developer>
 			<name>Paul Podgorsek</name>
 			<email>ppodgorsek@users.noreply.github.com</email>
@@ -45,23 +60,19 @@
 	</developers>
 
 	<scm>
-		<url>https://github.com/ppodgorsek/spring-test-dbunit</url>
-		<connection>scm:git:git://github.com/ppodgorsek/spring-test-dbunit.git</connection>
-		<developerConnection>scm:git:git@github.com:ppodgorsek/spring-test-dbunit.git</developerConnection>
+		<connection>scm:git:https://github.com/sporniket/spring-test-dbunit.git</connection>
+		<url>https://github.com/sporniket/spring-test-dbunit</url>
+		<tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
 		<system>GitHub Issues</system>
-		<url>https://github.com/ppodgorsek/spring-test-dbunit/issues</url>
+		<url>https://github.com/sporniket/spring-test-dbunit/issues</url>
 	</issueManagement>
 
 	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
 		<repository>
-			<id>ossrh</id>
+			<id>centralSonatype</id>
 			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository>
 	</distributionManagement>
@@ -107,7 +118,6 @@
 		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
 		<maven-release-plugin.version>2.5.3</maven-release-plugin.version>
 		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
-		<maven-scm-provider-gitexe.version>1.11.1</maven-scm-provider-gitexe.version>
 		<maven-site-plugin.version>3.7.1</maven-site-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 		<maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
@@ -119,31 +129,31 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>com.github.ppodgorsek</groupId>
+				<groupId>com.sporniket.spring-test-dbunit</groupId>
 				<artifactId>spring-test-dbunit-core</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.ppodgorsek</groupId>
+				<groupId>com.sporniket.spring-test-dbunit</groupId>
 				<artifactId>spring-test-dbunit-core</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.github.ppodgorsek</groupId>
+				<groupId>com.sporniket.spring-test-dbunit</groupId>
 				<artifactId>spring-test-dbunit-sample</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>com.github.ppodgorsek</groupId>
+				<groupId>com.sporniket.spring-test-dbunit</groupId>
 				<artifactId>spring-test-dbunit-sample</artifactId>
 				<version>${project.version}</version>
 				<type>test-jar</type>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>com.github.ppodgorsek</groupId>
+				<groupId>com.sporniket.spring-test-dbunit</groupId>
 				<artifactId>spring-test-dbunit-test</artifactId>
 				<version>${project.version}</version>
 				<scope>test</scope>
@@ -346,24 +356,10 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
 					<version>${maven-release-plugin.version}</version>
-					<dependencies>
-						<dependency>
-							<groupId>org.apache.maven.scm</groupId>
-							<artifactId>maven-scm-provider-gitexe</artifactId>
-							<version>${maven-scm-provider-gitexe.version}</version>
-						</dependency>
-					</dependencies>
-					<executions>
-						<execution>
-							<id>default</id>
-							<goals>
-								<goal>perform</goal>
-							</goals>
-							<configuration>
-								<pomFileName>spring-test-dbunit/pom.xml</pomFileName>
-							</configuration>
-						</execution>
-					</executions>
+					<configuration>
+						<tagNameFormat>v@{project.version}</tagNameFormat>
+						<pushChanges>false</pushChanges>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -442,19 +438,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- OSSRH -->
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>${nexus-staging-maven-plugin.version}</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -490,20 +473,13 @@
 
 	<profiles>
 		<profile>
-			<id>artifacts-signing</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<property>
-					<name>maven.sign.skip</name>
-					<value>false</value>
-				</property>
-			</activation>
+			<id>deploy2central</id>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
-						<version>${maven-gpg-plugin.version}</version>
+						<version>1.6</version>
 						<executions>
 							<execution>
 								<id>sign-artifacts</id>
@@ -511,6 +487,10 @@
 								<goals>
 									<goal>sign</goal>
 								</goals>
+								<configuration>
+									<executable>${gpg.executable}</executable>
+									<keyname>${gpg.keyname}</keyname>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
